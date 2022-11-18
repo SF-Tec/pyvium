@@ -1,15 +1,15 @@
 [tool.poetry]
-name = "pyvium-core"
-version = "0.1.0"
-description = ""
 authors = ["Alejandro Gutiérrez <agutierrez@stec.es>", "Raúl Marín <rmarin@sftec.es>"]
-readme = "README.md"
+description = ""
+exclude = ["workbook"]
+name = "pyvium-core"
 packages = [{include = "pyvium_core"}]
+readme = "README.md"
+version = "0.1.0"
 
 [tool.poetry.dependencies]
 python = "^3.11"
 
-
 [build-system]
-requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]
