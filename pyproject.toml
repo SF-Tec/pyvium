@@ -9,6 +9,7 @@ version = "0.1.4"
 
 [tool.poetry.dependencies]
 python = "^3.11"
+cffi = "^1.15.1"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
