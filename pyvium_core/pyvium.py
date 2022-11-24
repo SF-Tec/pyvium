@@ -66,10 +66,10 @@ ffi.cdef("""
     long __stdcall IV_StatusParSet(long *value);
 """)
 
-IVIUM_DLL_ROUTE = "../pyvium_core/IVIUM_remdriver64.dll"
+IVIUM_DLL_ROUTE = "./pyvium_core/IVIUM_remdriver64.dll"
 
 if maxsize <= 2**32:
-    IVIUM_DLL_ROUTE = "../pyvium_core/IVIUM_remdriver.dll"
+    IVIUM_DLL_ROUTE = "./pyvium_core/IVIUM_remdriver.dll"
 
 @dataclass
 class Pyvium:
