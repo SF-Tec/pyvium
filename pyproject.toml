@@ -5,11 +5,14 @@ exclude = ["workbook"]
 name = "pyvium-core"
 packages = [{include = "pyvium_core"}]
 readme = "README.md"
-version = "0.1.5"
+version = "0.1.24"
 
 [tool.poetry.dependencies]
 python = "^3.11"
 cffi = "^1.15.1"
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^2.15.6"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
