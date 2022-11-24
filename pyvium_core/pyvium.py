@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from sys import maxsize
+from os import path
+from sys import maxsize, modules
 from cffi import FFI
 
 ffi = FFI()
@@ -66,19 +67,21 @@ ffi.cdef("""
     long __stdcall IV_StatusParSet(long *value);
 """)
 
-IVIUM_DLL_ROUTE = "./IVIUM_remdriver64.dll"
+MODULE_DIRECTORY = path.dirname(modules["pyvium_core"].__file__)
+
+IVIUM_DLL_PATH = path.join(MODULE_DIRECTORY, "Ivium_remdriver64.dll")
 
 if maxsize <= 2**32:
-    IVIUM_DLL_ROUTE = "./IVIUM_remdriver.dll"
+    IVIUM_DLL_PATH = path.join(MODULE_DIRECTORY, "Ivium_remdriver.dll")
 
 @dataclass
 class Pyvium:
     '''Represents an execution of the Pyvium module'''
-    _lib = ffi.dlopen(IVIUM_DLL_ROUTE)
+    _lib = ffi.dlopen(IVIUM_DLL_PATH)
 
     # Deleting (Calling destructor)
     def __del__(self):
-        ffi.dlclose(IVIUM_DLL_ROUTE)
+        ffi.dlclose(self._lib)
 
     def open_driver(self):
         '''Open the driver to manipulate the Ivium software'''
