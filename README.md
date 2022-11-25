@@ -2,6 +2,9 @@
 
 Simple Python wrapper around the "Software development driver DLL" for IviumSoft.
 
+# Important:
+This module uses a dll from the IviumSoft application. You need to have this software installed on a Windows machine. The IviumSoft application can be downloaded from here: https://www.ivium.com/support/#Software%20update
+
 ## Installation
 
 Install PYVIUM CORE easily with pip:
