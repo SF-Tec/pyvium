@@ -126,3 +126,7 @@ class Pyvium:
     def is_iviumsoft_running(self):
         '''It returns true if, at least, one instance of IviumSoft is running'''
         return self._lib.IV_VersionCheck() == 1
+
+    def get_device_status(self):
+        '''It returns -1 (no IviumSoft), 0 (not connected), 1 (available_idle), 2 (available_busy), 3 (no device available)'''
+        return self._lib.IV_getdevicestatus()
