@@ -62,9 +62,6 @@ ffi.cdef("""
     long __stdcall IV_getdatafromline(long *pointnr, long *scannr, double *x, double *y, double *z);
 
     long __stdcall IV_getDbFileName(char *fname);
-
-    long __stdcall IV_StatusParGet(long *value);
-    long __stdcall IV_StatusParSet(long *value);
 """)
 
 MODULE_DIRECTORY = path.dirname(modules["pyvium_core"].__file__)
@@ -128,5 +125,46 @@ class Pyvium:
         return self._lib.IV_VersionCheck() == 1
 
     def get_device_status(self):
-        '''It returns -1 (no IviumSoft), 0 (not connected), 1 (available_idle), 2 (available_busy), 3 (no device available)'''
+        '''It returns -1 (no IviumSoft), 0 (not connected), 1 (available_idle), 2 (available_busy),
+        3 (no device available)'''
         return self._lib.IV_getdevicestatus()
+
+    def get_data_points_quantity(self):
+        '''Returns actual available number of datapoints: indicates the progress during a run'''
+        data_point = ffi.new("long *")
+
+        result_code = self._lib.IV_Ndatapoints(data_point)
+
+        return result_code, data_point[0]
+
+    def get_data_point(self, data_point_index):
+        '''Get the data from a datapoint with index int, returns 3 values that depend on
+        the used technique. For example LSV/CV methods return (E/I/0) Transient methods
+        return (time/I,E/0), Impedance methods return (Z1,Z2,freq) etc.'''
+        selected_data_point_index = ffi.new("long *", data_point_index)
+        measured_value1 = ffi.new("double *")
+        measured_value2 = ffi.new("double *")
+        measured_value3 = ffi.new("double *")
+
+        result_code = self._lib.IV_getdata(
+            selected_data_point_index, measured_value1, measured_value2, measured_value3)
+
+        return result_code, measured_value1[0], measured_value2[0], measured_value3[0]
+
+    def get_data_point_from_scan(self, data_point_index, scan_index):
+        '''Same as get_data_point, but with the additional scan_index parameter.
+        This function will allow reading data from non-selected (previous) scans.'''
+        selected_data_point_index = ffi.new("long *", data_point_index)
+        selected_line_index = ffi.new("long *", scan_index)
+        measured_value1 = ffi.new("double *")
+        measured_value2 = ffi.new("double *")
+        measured_value3 = ffi.new("double *")
+
+        result_code = self._lib.IV_getdatafromline(
+            selected_data_point_index,
+            selected_line_index,
+            measured_value1,
+            measured_value2,
+            measured_value3)
+
+        return result_code, measured_value1[0], measured_value2[0], measured_value3[0]
