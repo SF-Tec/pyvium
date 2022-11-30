@@ -172,7 +172,7 @@ class Pyvium:
     def get_cell_status(self):
         '''Returns cell status labels ["I_ovl", "Anin1_ovl","E_ovl", "CellOff_button pressed", "Cell on"]'''
         cell_status_bits = ffi.new("long *")
-        result_code = lib.IV_getcellstatus(cell_status_bits)
+        result_code = self._lib.IV_getcellstatus(cell_status_bits)
         cell_status_labels = []
         if result_code == 0:
             labels = ["I_ovl","", "Anin1_ovl","E_ovl","", "CellOff_button pressed", "Cell on"]
