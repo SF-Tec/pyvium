@@ -1,3 +1,4 @@
+'''This module is a simple wrapper around the "Software development driver DLL" for IviumSoft.'''
 from dataclasses import dataclass
 from os import path
 from sys import maxsize, modules
@@ -170,7 +171,8 @@ class Pyvium:
         return result_code, measured_value1[0], measured_value2[0], measured_value3[0]
 
     def get_cell_status(self):
-        '''Returns cell status labels ["I_ovl", "Anin1_ovl","E_ovl", "CellOff_button pressed", "Cell on"]'''
+        '''Returns cell status labels
+        ["I_ovl", "Anin1_ovl","E_ovl", "CellOff_button pressed", "Cell on"]'''
         cell_status_bits = ffi.new("long *")
         result_code = self._lib.IV_getcellstatus(cell_status_bits)
         cell_status_labels = []
@@ -180,3 +182,56 @@ class Pyvium:
                 if cell_status_bits[0] & (1 << i) and label:
                     cell_status_labels.append(label)
         return result_code, cell_status_labels
+
+    def load_method(self, method_file_path):
+        '''Loads method procedure previously saved to a file.
+        method_file_path represents the full path to the file.'''
+        method_file_path_ptr = ffi.new("char []", method_file_path.encode("utf-8"))
+        result_code = self._lib.IV_readmethod(method_file_path_ptr)
+
+        return result_code, ffi.string(method_file_path_ptr).decode("utf-8")
+
+    def save_method(self, method_file_path):
+        '''Saves currently loaded method procedure to a file.
+        method_file_path represents the full path to the new file.'''
+        method_file_path_ptr = ffi.new("char []", method_file_path.encode("utf-8"))
+
+        result_code = self._lib.IV_savemethod(method_file_path_ptr)
+
+        return result_code, ffi.string(method_file_path_ptr).decode("utf-8")
+
+    def start_method(self, method_file_path = ''):
+        '''Starts a method procedure.
+        If method_file_path is an empty string then the presently loaded procedure is started.
+        If the full path to a previously saved method is provided
+        then the procedure is loaded from the file and started.'''
+        method_file_path_ptr = ffi.new("char []", method_file_path.encode("utf-8"))
+
+        result_code = self._lib.IV_startmethod(method_file_path_ptr)
+
+        return result_code, ffi.string(method_file_path_ptr).decode("utf-8")
+
+    def save_method_data(self, method_data_file_path):
+        '''Saves the results of the last method execution into a file.
+        method_file_path represents the full path to the new file.'''
+        method_data_file_path_ptr = ffi.new("char []", method_data_file_path.encode("utf-8"))
+
+        result_code = self._lib.IV_savedata(method_data_file_path_ptr)
+
+        return result_code, ffi.string(method_data_file_path_ptr).decode("utf-8")
+
+    def abort_method(self):
+        '''Aborts the ongoing method procedure'''
+        result_code = self._lib.IV_abort()
+
+        return result_code
+
+    def set_method_parameter_value(self, parameter_name, parameter_value):
+        '''Allows updating the parameter values for the currently loaded method procedrue.
+        It only works for text based parameters and dropdowns (multiple option selectors).'''
+        parameter_name_ptr = ffi.new("char []", parameter_name.encode("utf-8"))
+        parameter_value_ptr = ffi.new("char []", parameter_value.encode("utf-8"))
+
+        result_code = self._lib.IV_setmethodparameter(parameter_name_ptr, parameter_value_ptr)
+
+        return result_code
