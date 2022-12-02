@@ -235,16 +235,14 @@ class Pyvium:
         result_code = self._lib.IV_setmethodparameter(parameter_name_ptr, parameter_value_ptr)
 
         return result_code
-    
-    def set_connection_mode(self, connection_mode_number = 1):
-        ''' Select cell connection configuration,
-         0=off; 1=EStat4EL(default), 2=EStat2EL,3=EstatDummy1,4=EStatDummy2,5=EstatDummy3,
-         6=EstatDummy4, 7=Istat4EL, 8=Istat2EL, 9=BiStat4EL, 10=BiStat2EL'''
-        connection_mode_labels = ['off', 'Cell Estat4', 'Cell Estat2','1 kOhm Estat','100 kOhm Estat','10 MOhm Estat','R(RC) Estat', 'Cell Istat4', 'Cell Istat2', 'Cell Bistat4', 'Cell Bistat2']
+
+    def set_connection_mode(self, connection_mode_number):
+        ''' Select the connection mode for the currently connected device.
+        The available modes depend on the connected device.
+        These are all the supported connection modes: 0=off; 1=EStat4EL(default), 2=EStat2EL,
+        3=EstatDummy1,4=EStatDummy2,5=EstatDummy3,6=EstatDummy4
+        7=Istat4EL, 8=Istat2EL, 9=IstatDummy, 10=BiStat4EL, 11=BiStat2EL'''
         connection_mode_number_ptr = ffi.new("long *",connection_mode_number)
         result_code = self._lib.IV_setconnectionmode(connection_mode_number_ptr)
-        connection_label = connection_mode_number
-        if 0<= connection_mode_number <= 10:
-            connection_label = connection_mode_labels[connection_mode_number]
 
-        return result_code,connection_label
+        return result_code
