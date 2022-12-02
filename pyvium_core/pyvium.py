@@ -72,6 +72,7 @@ IVIUM_DLL_PATH = path.join(MODULE_DIRECTORY, "Ivium_remdriver64.dll")
 if maxsize <= 2**32:
     IVIUM_DLL_PATH = path.join(MODULE_DIRECTORY, "Ivium_remdriver.dll")
 
+
 @dataclass
 class Pyvium:
     '''Represents an execution of the Pyvium module'''
@@ -177,8 +178,9 @@ class Pyvium:
         result_code = self._lib.IV_getcellstatus(cell_status_bits)
         cell_status_labels = []
         if result_code == 0:
-            labels = ["I_ovl","", "Anin1_ovl","E_ovl","", "CellOff_button pressed", "Cell on"]
-            for i, label in enumerate(labels,2):
+            labels = ["I_ovl", "", "Anin1_ovl", "E_ovl",
+                      "", "CellOff_button pressed", "Cell on"]
+            for i, label in enumerate(labels, 2):
                 if cell_status_bits[0] & (1 << i) and label:
                     cell_status_labels.append(label)
         return result_code, cell_status_labels
@@ -186,7 +188,8 @@ class Pyvium:
     def load_method(self, method_file_path):
         '''Loads method procedure previously saved to a file.
         method_file_path represents the full path to the file.'''
-        method_file_path_ptr = ffi.new("char []", method_file_path.encode("utf-8"))
+        method_file_path_ptr = ffi.new(
+            "char []", method_file_path.encode("utf-8"))
         result_code = self._lib.IV_readmethod(method_file_path_ptr)
 
         return result_code, ffi.string(method_file_path_ptr).decode("utf-8")
@@ -194,18 +197,20 @@ class Pyvium:
     def save_method(self, method_file_path):
         '''Saves currently loaded method procedure to a file.
         method_file_path represents the full path to the new file.'''
-        method_file_path_ptr = ffi.new("char []", method_file_path.encode("utf-8"))
+        method_file_path_ptr = ffi.new(
+            "char []", method_file_path.encode("utf-8"))
 
         result_code = self._lib.IV_savemethod(method_file_path_ptr)
 
         return result_code, ffi.string(method_file_path_ptr).decode("utf-8")
 
-    def start_method(self, method_file_path = ''):
+    def start_method(self, method_file_path=''):
         '''Starts a method procedure.
         If method_file_path is an empty string then the presently loaded procedure is started.
         If the full path to a previously saved method is provided
         then the procedure is loaded from the file and started.'''
-        method_file_path_ptr = ffi.new("char []", method_file_path.encode("utf-8"))
+        method_file_path_ptr = ffi.new(
+            "char []", method_file_path.encode("utf-8"))
 
         result_code = self._lib.IV_startmethod(method_file_path_ptr)
 
@@ -214,7 +219,8 @@ class Pyvium:
     def save_method_data(self, method_data_file_path):
         '''Saves the results of the last method execution into a file.
         method_file_path represents the full path to the new file.'''
-        method_data_file_path_ptr = ffi.new("char []", method_data_file_path.encode("utf-8"))
+        method_data_file_path_ptr = ffi.new(
+            "char []", method_data_file_path.encode("utf-8"))
 
         result_code = self._lib.IV_savedata(method_data_file_path_ptr)
 
@@ -230,9 +236,11 @@ class Pyvium:
         '''Allows updating the parameter values for the currently loaded method procedrue.
         It only works for text based parameters and dropdowns (multiple option selectors).'''
         parameter_name_ptr = ffi.new("char []", parameter_name.encode("utf-8"))
-        parameter_value_ptr = ffi.new("char []", parameter_value.encode("utf-8"))
+        parameter_value_ptr = ffi.new(
+            "char []", parameter_value.encode("utf-8"))
 
-        result_code = self._lib.IV_setmethodparameter(parameter_name_ptr, parameter_value_ptr)
+        result_code = self._lib.IV_setmethodparameter(
+            parameter_name_ptr, parameter_value_ptr)
 
         return result_code
 
@@ -242,7 +250,43 @@ class Pyvium:
         These are all the supported connection modes: 0=off; 1=EStat4EL(default), 2=EStat2EL,
         3=EstatDummy1,4=EStatDummy2,5=EstatDummy3,6=EstatDummy4
         7=Istat4EL, 8=Istat2EL, 9=IstatDummy, 10=BiStat4EL, 11=BiStat2EL'''
-        connection_mode_number_ptr = ffi.new("long *",connection_mode_number)
-        result_code = self._lib.IV_setconnectionmode(connection_mode_number_ptr)
+        connection_mode_number_ptr = ffi.new("long *", connection_mode_number)
+        result_code = self._lib.IV_setconnectionmode(
+            connection_mode_number_ptr)
 
         return result_code
+
+    def get_current_trace(self, points_quantity, interval_rate):
+        '''Returns a sequence of measured currents at defined samplingrate
+        (npoints, interval, array of double): npoints<=256, interval: 10us to 20ms'''
+        points_quantity_ptr = ffi.new("long *", points_quantity)
+        interval_rate_ptr = ffi.new("double *", interval_rate)
+        result_ptr = ffi.new("double *")
+        result_code = self._lib.IV_getcurrenttrace(
+            points_quantity_ptr, interval_rate_ptr, result_ptr)
+
+        return result_code, result_ptr[0]
+
+    def get_current_we2_trace(self, points_quantity, interval_rate):
+        '''Returns a sequence of measured WE2 currents at defined samplingrate
+        (npoints, interval, array of double): npoints<=256, interval: 10us to 20ms'''
+        points_quantity_ptr = ffi.new("long *", points_quantity)
+        interval_rate_ptr = ffi.new("double *", interval_rate)
+        result_ptr = ffi.new("double *")
+
+        result_code = self._lib.IV_getcurrentWE2trace(
+            points_quantity_ptr, interval_rate_ptr, result_ptr)
+
+        return result_code, result_ptr[0]
+
+    def get_current_potencial_trace(self, points_quantity, interval_rate):
+        '''Returns a sequence of measured potentials at defined samplingrate
+        (npoints, interval, array of double): npoints<=256, interval: 10us to 20ms'''
+        points_quantity_ptr = ffi.new("long *", points_quantity)
+        interval_rate_ptr = ffi.new("double *", interval_rate)
+        result_ptr = ffi.new("double *")
+
+        result_code = self._lib.IV_getpotentialtrace(
+            points_quantity_ptr, interval_rate_ptr, result_ptr)
+
+        return result_code, result_ptr[0]

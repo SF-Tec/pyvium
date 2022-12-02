@@ -13,6 +13,7 @@ cffi = "^1.15.1"
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^2.15.6"
+autopep8 = "^2.0.0"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
