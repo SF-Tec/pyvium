@@ -290,3 +290,15 @@ class Pyvium:
             points_quantity_ptr, interval_rate_ptr, result_ptr)
 
         return result_code, result_ptr[0]
+
+    def set_ac_amplitude(self, ac_amplitude):
+        '''Set the value of the ac amplitude in Volts'''
+        ac_amplitude_ptr = ffi.new("double *",ac_amplitude)
+        result_code = self._lib.IV_setamplitude(ac_amplitude_ptr)
+        return result_code,ac_amplitude_ptr[0]
+
+    def set_ac_frequency(self, ac_frequency):
+        '''Set the value of the ac frequency in Hz'''
+        ac_frequency_ptr = ffi.new("double *",ac_frequency)
+        result_code = self._lib.IV_setfrequency(ac_frequency_ptr)
+        return result_code,ac_frequency_ptr[0]
