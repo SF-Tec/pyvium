@@ -19,6 +19,10 @@ Or with poetry:
 poetry add pyvium-core
 ```
 
+## Not working functions
+- IV_getcurrentWE2trace
+- IV_getpotentialtrace
+
 ## Publishing the package
 [using python-poetry to publish to test.pypi.org - Stack Overflow](https://stackoverflow.com/questions/68882603/using-python-poetry-to-publish-to-test-pypi-org)
 
