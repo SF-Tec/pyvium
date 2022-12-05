@@ -242,6 +242,14 @@ class Core:
             connection_mode_number_ptr)
 
         return result_code
+    
+    def IV_setcellon(self,cell_on_mode_number):
+        '''Set cell on off to close cell relais (0=off;1=on), same as IV_setconnectionmode'''
+        cell_on_mode_number_ptr = ffi.new("long *", cell_on_mode_number)
+        result_code = self._lib.IV_setconnectionmode(
+            cell_on_mode_number_ptr)
+
+        return result_code
 
     def IV_getcurrenttrace(self, points_quantity, interval_rate):
         '''Returns a sequence of measured currents at defined samplingrate
