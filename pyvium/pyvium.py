@@ -1,41 +1,38 @@
 '''This module is a simple wrapper around the "Software development driver DLL" for IviumSoft.'''
-from dataclasses import dataclass
 from .core import Core
 
 core = Core()
 
 
-@dataclass
 class Pyvium:
-    
+
     def __init__(self):
-       core.IV_open() # Open the driver to manipulate the Ivium software
-       '''@@--> Se podría cerrar el driver de alguna manera externa?
+        '''@@--> Se podría cerrar el driver de alguna manera externa?
             Returns:
                 -1 no iviumsoft (but opends the driver anyway so you can call rest of the fn)
                  0 rest of cases (no device, device not conected, device connected, device bussy...)
        '''
+        core.IV_open()  # Open the driver to manipulate the Ivium software
 
     # Deleting (Calling destructor)
     def __del__(self):
-        core.IV_close() # Closes the iviumSoft driver
         '''@@--> Se podría cerrar el driver de alguna manera externa?
             Returns:
                 crash if the driver is not open
                 0 rest of cases (no device, device not conected, device connected, device bussy...)
        '''
+        core.IV_close()  # Closes the iviumSoft driver
 
     def get_max_device_number(self):
         '''Returns the maximum number of devices that can be managed by IviumSoft'''
-        return core.IV_MaxDevices()
         '''Returns:
                 crash if the driver is not open
                 24 rest of cases (no device, device not conected, device connected, device bussy...)
        '''
+        return core.IV_MaxDevices()
 
     def get_device_serial_number(self):
         '''Returns the serial number of the currently selected device'''
-        result_code, serial_number = core.IV_readSN()
         '''Returns:
                 crash if the driver is not open
                 -1,'' --> no iviumsoft or driver opened with no iviumsoft
@@ -43,6 +40,7 @@ class Pyvium:
                 0,'sn' --> device not conected (at least for DemoStat), not working for CompacStat or OctoStat (at least)
                 0,'sn' --> conected device (compacstat gives "BXXX" instead of "bXXX" when connected with usb, Octostat gives "Oct-1"...)
        '''
+        result_code, serial_number = core.IV_readSN()
 
         return result_code, serial_number
 
@@ -83,14 +81,16 @@ class Pyvium:
         '''Get the data from a datapoint with index int, returns 3 values that depend on
         the used technique. For example LSV/CV methods return (E/I/0) Transient methods
         return (time/I,E/0), Impedance methods return (Z1,Z2,freq) etc.'''
-        result_code, value1, value2, value3 = core.IV_getdata(data_point_index3)
+        result_code, value1, value2, value3 = core.IV_getdata(
+            data_point_index)
 
         return result_code, value1, value2, value3
 
     def get_data_point_from_scan(self, data_point_index, scan_index):
         '''Same as get_data_point, but with the additional scan_index parameter.
         This function will allow reading data from non-selected (previous) scans.'''
-        result_code, value1, value2, value3 = core.IV_getdatafromline(data_point_index, scan_index)
+        result_code, value1, value2, value3 = core.IV_getdatafromline(
+            data_point_index, scan_index)
 
         return result_code, value1, value2, value3
 
@@ -146,7 +146,8 @@ class Pyvium:
     def set_method_parameter_value(self, parameter_name, parameter_value):
         '''Allows updating the parameter values for the currently loaded method procedrue.
         It only works for text based parameters and dropdowns (multiple option selectors).'''
-        result_code = core.IV_setmethodparameter(parameter_name, parameter_value)
+        result_code = core.IV_setmethodparameter(
+            parameter_name, parameter_value)
 
         return result_code
 
@@ -163,21 +164,24 @@ class Pyvium:
     def get_current_trace(self, points_quantity, interval_rate):
         '''Returns a sequence of measured currents at defined samplingrate
         (npoints, interval, array of double): npoints<=256, interval: 10us to 20ms'''
-        result_code, current = core.IV_getcurrenttrace(points_quantity, interval_rate)
+        result_code, current = core.IV_getcurrenttrace(
+            points_quantity, interval_rate)
 
         return result_code, current
 
     def get_current_we2_trace(self, points_quantity, interval_rate):
         '''Returns a sequence of measured WE2 currents at defined samplingrate
         (npoints, interval, array of double): npoints<=256, interval: 10us to 20ms'''
-        result_code, current = core.IV_getcurrentWE2trace(points_quantity, interval_rate)
+        result_code, current = core.IV_getcurrentWE2trace(
+            points_quantity, interval_rate)
 
         return result_code, current
 
     def get_potencial_trace(self, points_quantity, interval_rate):
         '''Returns a sequence of measured potentials at defined samplingrate
         (npoints, interval, array of double): npoints<=256, interval: 10us to 20ms'''
-        result_code, potential = core.IV_getpotentialtrace(points_quantity, interval_rate)
+        result_code, potential = core.IV_getpotentialtrace(
+            points_quantity, interval_rate)
 
         return result_code, potential
 
