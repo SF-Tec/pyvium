@@ -65,7 +65,7 @@ ffi.cdef("""
     long __stdcall IV_getDbFileName(char *fname);
 """)
 
-MODULE_DIRECTORY = path.dirname(modules["pyvium_core"].__file__)
+MODULE_DIRECTORY = path.dirname(modules["pyvium"].__file__)
 
 IVIUM_DLL_PATH = path.join(MODULE_DIRECTORY, "Ivium_remdriver64.dll")
 
