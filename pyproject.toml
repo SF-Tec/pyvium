@@ -2,9 +2,9 @@
 authors = ["Alejandro Gutiérrez <agutierrez@stec.es>", "Raúl Marín <rmarin@sftec.es>"]
 description = "A tiny Python wrapper around the <Software development driver DLL> for IviumSoft."
 exclude = ["docs", "tests"]
-homepage = "https://github.com/SF-Tec/pyvium-core"
+homepage = "https://github.com/SF-Tec/pyvium"
 keywords = ["ivium", "iviumsoft", "ivium software", "ivium compactstat"]
-repository = "https://github.com/SF-Tec/pyvium-core"
+repository = "https://github.com/SF-Tec/pyvium"
 license = "Apache-2.0"
 name = "pyvium"
 packages = [{include = "pyvium"}]
