@@ -82,7 +82,6 @@ class Core:
     def __del__(self):
         ffi.dlclose(self._lib)
 
-
     # Generic functions
     def IV_open(self):
         '''Open the driver to manipulate the Ivium software'''
@@ -445,7 +444,3 @@ class Core:
             measured_value2_ptr,
             measured_value3_ptr)
         return result_code, measured_value1_ptr[0], measured_value2_ptr[0], measured_value3_ptr[0]
-
-
-
-
