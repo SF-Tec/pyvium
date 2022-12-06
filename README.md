@@ -10,56 +10,49 @@ This module uses a dll from the IviumSoft application. You need to have this sof
 Install PYVIUM CORE easily with pip:
 
 ```
-pip install pyvium-core
+pip install pyvium
 ```
 
 Or with poetry:
 
 ```
-poetry add pyvium-core
+poetry add pyvium
 ```
+
+## Usage Example (Using IviumSoft Core functions)
+
+To use the same functions available in the "IviumSoft driver DLL" you can import the Core class as follows. All functions return a result code (integer) and a result value if available. For further information you can check the IviumSoft documentation.
+
+```
+from pyvium import Core
+
+app = Core()
+
+app.IV_open()
+app.IV_getdevicestatus()
+app.IV_close()
+```
+
+<!-- ## Usage Example (Using Pyvium methods)
+
+This is a wrapper around the Core functions that adds a few things:
+- Exception management
+- New functionalities
+
+```
+from pyvium import Pyvium
+
+app = Pyvium()
+
+app.connect_device()
+``` -->
+
 
 ## Not working functions
 - IV_getcurrentWE2trace
 - IV_getpotentialtrace
 
-## Publishing the package
-[using python-poetry to publish to test.pypi.org - Stack Overflow](https://stackoverflow.com/questions/68882603/using-python-poetry-to-publish-to-test-pypi-org)
-
-> ## One time setup ( per host / environment)
-> 
-> ### PYPI test
-> 
-> -   add repository to poetry config `poetry config repositories.test-pypi https://test.pypi.org/legacy/`
->     
-> -   get token from [https://test.pypi.org/manage/account/token/](https://test.pypi.org/manage/account/token/)
->     
-> -   store token using `poetry config pypi-token.test-pypi pypi-YYYYYYYY`
->     
-> 
-> _Note:_ 'test-pypi' is the name of the repository
-> 
-> ### PYPI Production
-> 
-> -   get token from [https://pypi.org/manage/account/token/](https://pypi.org/manage/account/token/)
-> -   store token using `poetry config pypi-token.pypi pypi-XXXXXXXX`
-> 
-> ## Bump version
-> 
-> -   `poetry version prerelease`
-> -   `poetry version patch`
-> 
-> ## Poetry Publish
-> 
-> To test
-> 
-> -   `poetry publish --build -r test-pypi`
-> 
-> To PyPi
-> 
-> -   `poetry publish --build`
-
 ## Links
 
-* [See on GitHub](https://github.com/sftec/pyvium-core)
-* [See on PyPI](https://pypi.org/project/pyvium-core)
+* [See on GitHub](https://github.com/sftec/pyvium)
+* [See on PyPI](https://pypi.org/project/pyvium)
