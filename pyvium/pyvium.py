@@ -38,7 +38,7 @@ class Pyvium:
                 -1,'' --> no iviumsoft or driver opened with no iviumsoft
                 0,'' --> not conected CompacStat/OctoStat..., no device (or driver opened with no device?, check with DemoStat)
                 0,'sn' --> device not conected (at least for DemoStat), not working for CompacStat or OctoStat (at least)
-                0,'sn' --> conected device (compacstat gives "BXXX" instead of "bXXX" when connected with usb, Octostat gives "Oct-1"...)
+                0,'sn' --> conected device (compacstat gives "BXXX" instead of "bXXX" when usb powered, Octostat gives "Oct-1"...)
        '''
         result_code, serial_number = core.IV_readSN()
 
