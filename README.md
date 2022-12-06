@@ -26,11 +26,9 @@ To use the same functions available in the "IviumSoft driver DLL" you can import
 ```
 from pyvium import Core
 
-app = Core()
-
-app.IV_open()
-app.IV_getdevicestatus()
-app.IV_close()
+Core.IV_open()
+Core.IV_getdevicestatus()
+Core.IV_close()
 ```
 
 <!-- ## Usage Example (Using Pyvium methods)
