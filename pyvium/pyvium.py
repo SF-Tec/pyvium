@@ -1,8 +1,24 @@
 '''This module is a simple wrapper around the "Software development driver DLL" for IviumSoft.'''
 from .core import Core
+from .pyvium_verifiers import PyviumVerifiers
 
 
 class Pyvium:
+    '''Represents an execution of the Pyvium module'''
+    
+    @staticmethod
+    def open_driver():
+        '''Open the driver to manipulate the Ivium software'''
+        if Core.is_driver_open():
+            Core.IV_close()
+            
+        Core.IV_open()
+
+        try:
+            PyviumVerifiers.verify_iviumsoft_is_running()
+        except:
+            Core.IV_close()
+            raise
 
     @staticmethod
     def get_max_device_number():
