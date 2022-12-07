@@ -1,7 +1,7 @@
 ## Pyvium and Core methods
 :heavy_check_mark: ready
 :small_orange_diamond: under development
-:no_entry_sign: not working
+:x: not working
 
 | Pyvium Methods                                        | Core Methods                              |
 | ----------------------------------------------------- | ----------------------------------------- |
