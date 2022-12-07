@@ -1,7 +1,6 @@
 '''This module is a simple wrapper around the "Software development driver DLL" for IviumSoft.'''
-from os import path
-from sys import maxsize, modules
 from cffi import FFI
+from .util import get_ivium_dll_path
 
 ffi = FFI()
 ffi.cdef("""
@@ -64,42 +63,42 @@ ffi.cdef("""
     long __stdcall IV_getDbFileName(char *fname);
 """)
 
-MODULE_DIRECTORY = path.dirname(modules["pyvium"].__file__)
-
-IVIUM_DLL_PATH = path.join(MODULE_DIRECTORY, "Ivium_remdriver64.dll")
-
-if maxsize <= 2**32:
-    IVIUM_DLL_PATH = path.join(MODULE_DIRECTORY, "Ivium_remdriver.dll")
-
+IVIUM_DLL_PATH = get_ivium_dll_path()
 
 class Core:
     '''Represents an execution of the Pyvium module'''
-    _lib = ffi.dlopen(IVIUM_DLL_PATH)
+    __is_driver_open = False
+    __lib = ffi.dlopen(IVIUM_DLL_PATH)
 
     # Generic functions
     @staticmethod
     def IV_open():
         '''Open the driver to manipulate the Ivium software'''
-        return Core._lib.IV_open()
+        Core.__is_driver_open = True
+        return Core.__lib.IV_open()
 
 
     @staticmethod
     def IV_close():
         '''Closes the iviumSoft driver'''
-        return Core._lib.IV_close()
+        Core.__is_driver_open = False
+        return Core.__lib.IV_close()
 
+    @staticmethod
+    def is_driver_open():
+        return Core.__is_driver_open
 
     @staticmethod
     def IV_MaxDevices():
         '''Returns the maximum number of devices that can be managed by IviumSoft'''
-        return Core._lib.IV_MaxDevices()
+        return Core.__lib.IV_MaxDevices()
 
 
     @staticmethod
     def IV_selectdevice( iviumsoft_instance_number):
         '''It allows to select one instance of the currently running IviumSoft instances'''
         instance_number_ptr = ffi.new("long *", iviumsoft_instance_number)
-        result_code = Core._lib.IV_selectdevice(instance_number_ptr)
+        result_code = Core.__lib.IV_selectdevice(instance_number_ptr)
         return result_code, instance_number_ptr[0]
 
 
@@ -107,14 +106,14 @@ class Core:
     def IV_getdevicestatus():
         '''It returns -1 (no IviumSoft), 0 (not connected), 1 (available_idle), 2 (available_busy),
             3 (no device available)'''
-        return Core._lib.IV_getdevicestatus()
+        return Core.__lib.IV_getdevicestatus()
 
 
     @staticmethod
     def IV_readSN():
         '''Returns the serial number of the currently selected device'''
         device_serial_number_ptr = ffi.new("char[]", 16)
-        result_code = Core._lib.IV_readSN(device_serial_number_ptr)
+        result_code = Core.__lib.IV_readSN(device_serial_number_ptr)
         return result_code, ffi.string(device_serial_number_ptr).decode("utf-8")
 
 
@@ -122,7 +121,7 @@ class Core:
     def IV_connect( connection_status):
         '''It connects the currently selected device'''
         connection_status_ptr = ffi.new("long *", connection_status)
-        result_code = Core._lib.IV_connect(connection_status_ptr)
+        result_code = Core.__lib.IV_connect(connection_status_ptr)
         return result_code, connection_status_ptr[0]
 
 
@@ -130,38 +129,38 @@ class Core:
     def IV_VersionHost( version_host):
         '''REVISE!!! Returns the version Host'''
         version_host_ptr = ffi.new("long *", version_host)
-        result_code = Core._lib.IV_VersionHost(version_host_ptr)
+        result_code = Core.__lib.IV_VersionHost(version_host_ptr)
         return result_code, version_host_ptr[0]
 
 
     @staticmethod
     def IV_VersionDll():
         '''Returns the version of the IviumSoft dll'''
-        return Core._lib.IV_VersionDll()
+        return Core.__lib.IV_VersionDll()
 
 
     @staticmethod
     def IV_VersionCheck():
         '''It returns 1 if, at least, one instance of IviumSoft is running'''
-        return Core._lib.IV_VersionCheck()
+        return Core.__lib.IV_VersionCheck()
 
 
     @staticmethod
     def IV_HostHandle():
         '''REVISE!!! Returns Host Handle'''
-        return Core._lib.IV_HostHandle()
+        return Core.__lib.IV_HostHandle()
 
 
     @staticmethod
     def IV_VersionDllFile():
         '''REVISE!!! Returns DLL file version'''
-        return Core._lib.IV_VersionDllFile()
+        return Core.__lib.IV_VersionDllFile()
 
 
     @staticmethod
     def IV_VersionDllFileStr():
         '''REVISE!!! Returns DLL file version str'''
-        return Core._lib.IV_VersionDllFileStr()
+        return Core.__lib.IV_VersionDllFileStr()
 
 
     @staticmethod
@@ -172,7 +171,7 @@ class Core:
             Now the channel/instrument that is connected to this tab can be controlled. 
             If no instrument is connected, the next available instrument in the list can be connected (IV_connect) and controlled.'''
         chanel_number_ptr = ffi.new("long *", chanel_number)
-        result_code = Core._lib.IV_SelectChannel(chanel_number_ptr)
+        result_code = Core.__lib.IV_SelectChannel(chanel_number_ptr)
         return result_code
 
         # Direct functions
@@ -183,7 +182,7 @@ class Core:
         '''Returns cell status labels
             ["I_ovl", "Anin1_ovl","E_ovl", "CellOff_button pressed", "Cell on"]'''
         cell_status_ptr = ffi.new("long *")
-        result_code = Core._lib.IV_getcellstatus(cell_status_ptr)
+        result_code = Core.__lib.IV_getcellstatus(cell_status_ptr)
         return result_code, cell_status_ptr[0]
 
 
@@ -195,7 +194,7 @@ class Core:
             3=EstatDummy1,4=EStatDummy2,5=EstatDummy3,6=EstatDummy4
             7=Istat4EL, 8=Istat2EL, 9=IstatDummy, 10=BiStat4EL, 11=BiStat2EL'''
         connection_mode_number_ptr = ffi.new("long *", connection_mode_number)
-        result_code = Core._lib.IV_setconnectionmode(
+        result_code = Core.__lib.IV_setconnectionmode(
             connection_mode_number_ptr)
         return result_code
 
@@ -204,7 +203,7 @@ class Core:
     def IV_setcellon( cell_on_mode_number):
         '''Set cell on off to close cell relais (0=off;1=on)'''
         cell_on_mode_number_ptr = ffi.new("long *", cell_on_mode_number)
-        result_code = Core._lib.IV_setcellon(
+        result_code = Core.__lib.IV_setcellon(
             cell_on_mode_number_ptr)
         return result_code
 
@@ -213,7 +212,7 @@ class Core:
     def IV_setpotential( potential_value):
         '''Set cell potential'''
         potential_value_ptr = ffi.new("double *", potential_value)
-        result_code = Core._lib.IV_setpotential(potential_value_ptr)
+        result_code = Core.__lib.IV_setpotential(potential_value_ptr)
         return result_code
 
 
@@ -221,7 +220,7 @@ class Core:
     def IV_setpotentialWE2( potential_we2_value):
         '''Set BiStat offset potential'''
         potential_we2_value_ptr = ffi.new("double *", potential_we2_value)
-        result_code = Core._lib.IV_setpotentialWE2(potential_we2_value_ptr)
+        result_code = Core.__lib.IV_setpotentialWE2(potential_we2_value_ptr)
         return result_code
 
 
@@ -229,7 +228,7 @@ class Core:
     def IV_setcurrent( current_value):
         '''Set cell current (galvanostatic mode)'''
         current_value_ptr = ffi.new("double *", current_value)
-        result_code = Core._lib.IV_setpotentialWE2(current_value_ptr)
+        result_code = Core.__lib.IV_setpotentialWE2(current_value_ptr)
         return result_code
 
 
@@ -237,7 +236,7 @@ class Core:
     def IV_getpotential():
         '''Returns measured potential'''
         potential_value_ptr = ffi.new("double *")
-        result_code = Core._lib.IV_getpotential(potential_value_ptr)
+        result_code = Core.__lib.IV_getpotential(potential_value_ptr)
         return result_code, potential_value_ptr[0]
 
 
@@ -245,7 +244,7 @@ class Core:
     def IV_setcurrentrange( current_range_number):
         '''Set current range, 0=10A, 1=1A, etc,'''
         current_range_number_ptr = ffi.new("long *", current_range_number)
-        result_code = Core._lib.IV_setcurrentrange(current_range_number_ptr)
+        result_code = Core.__lib.IV_setcurrentrange(current_range_number_ptr)
         return result_code
 
 
@@ -253,7 +252,7 @@ class Core:
     def IV_setcurrentrangeWE2( current_range_number):
         '''Set current range for BiStat, 0=10mA, 1=1mA, etc,'''
         current_range_number_ptr = ffi.new("long *", current_range_number)
-        result_code = Core._lib.IV_setcurrentrangeWE2(current_range_number_ptr)
+        result_code = Core.__lib.IV_setcurrentrangeWE2(current_range_number_ptr)
         return result_code
 
 
@@ -261,7 +260,7 @@ class Core:
     def IV_getcurrent():
         '''Returns measured current'''
         current_value_ptr = ffi.new("double *")
-        result_code = Core._lib.IV_getcurrent(current_value_ptr)
+        result_code = Core.__lib.IV_getcurrent(current_value_ptr)
         return result_code, current_value_ptr[0]
 
 
@@ -269,7 +268,7 @@ class Core:
     def IV_getcurrentWE2():
         '''Returns measured current from WE2 (bipotentiostat)'''
         current_value_ptr = ffi.new("double *")
-        result_code = Core._lib.IV_getcurrentWE2(current_value_ptr)
+        result_code = Core.__lib.IV_getcurrentWE2(current_value_ptr)
         return result_code, current_value_ptr[0]
 
 
@@ -277,7 +276,7 @@ class Core:
     def IV_setfilter( filter_number):
         '''Set filter, for int :0=1MHz, 1=100kHz, 2=10kHz, 3=1kHz, 4=10Hz'''
         filter_number_ptr = ffi.new("long *", filter_number)
-        result_code = Core._lib.IV_setfilter(filter_number_ptr)
+        result_code = Core.__lib.IV_setfilter(filter_number_ptr)
         return result_code
 
 
@@ -285,7 +284,7 @@ class Core:
     def IV_setstability( stability_number):
         '''Set stability, for int 0=HighSpeed, 1=Standard, 2=HighStability'''
         stability_number_ptr = ffi.new("long *", stability_number)
-        result_code = Core._lib.IV_setstability(stability_number_ptr)
+        result_code = Core.__lib.IV_setstability(stability_number_ptr)
         return result_code
 
 
@@ -296,7 +295,7 @@ class Core:
             This bistat_mode function also can be used to control the Automatic E-ranging function of the instrument;
             0=AutoEranging off; 1=AutoEranging on'''
         value_ptr = ffi.new("long *", value)
-        result_code = Core._lib.IV_setstability(value_ptr)
+        result_code = Core.__lib.IV_setstability(value_ptr)
         return result_code
 
 
@@ -305,7 +304,7 @@ class Core:
         '''Set dac on external port, int=0 for dac1, int=1 for dac2'''
         channel_number_ptr = ffi.new("long *", channel_number)
         value_ptr = ffi.new("double *", value)
-        result_code = Core._lib.IV_setdac(channel_number_ptr, value_ptr)
+        result_code = Core.__lib.IV_setdac(channel_number_ptr, value_ptr)
         return result_code
 
 
@@ -314,7 +313,7 @@ class Core:
         '''REVISE! Returns measured voltage on external ADC port, int=channelnr. 0-7'''
         channel_number_ptr = ffi.new("long *", channel_number)
         measured_voltage_ptr = ffi.new("double *")
-        result_code = Core._lib.IV_getdac(
+        result_code = Core.__lib.IV_getdac(
             channel_number_ptr, measured_voltage_ptr)
         return result_code, measured_voltage_ptr[0]
 
@@ -323,7 +322,7 @@ class Core:
     def IV_setmuxchannel( channel_number=0):
         '''Set channel of multiplexer, int=channelnr. starting from 0(default)'''
         channel_number_ptr = ffi.new("long *", channel_number)
-        result_code = Core._lib.IV_setmuxchannel(channel_number_ptr)
+        result_code = Core.__lib.IV_setmuxchannel(channel_number_ptr)
         return result_code
 
 
@@ -331,7 +330,7 @@ class Core:
     def IV_setdigout( value):
         '''REVISE! Set digital lines on external port, int is bitmask'''
         value_ptr = ffi.new("long *", value)
-        result_code = Core._lib.IV_setdigout(value_ptr)
+        result_code = Core.__lib.IV_setdigout(value_ptr)
         return result_code
 
 
@@ -339,21 +338,21 @@ class Core:
     def IV_getdigin():
         '''REVISE! Returns status of digital inputs from external port, int is bitmask'''
         value_ptr = ffi.new("long *")
-        result_code = Core._lib.IV_getdigin(value_ptr)
+        result_code = Core.__lib.IV_getdigin(value_ptr)
         return result_code, value_ptr[0]
 
 
     @staticmethod
     def IV_setfrequency( frequency):
         frequency_ptr = ffi.new("double *", frequency)
-        result_code = Core._lib.IV_setfrequency(frequency_ptr)
+        result_code = Core.__lib.IV_setfrequency(frequency_ptr)
         return result_code
 
 
     @staticmethod
     def IV_setamplitude( amplitude):
         amplitude_ptr = ffi.new("double *", amplitude)
-        result_code = Core._lib.IV_setamplitude(amplitude_ptr)
+        result_code = Core.__lib.IV_setamplitude(amplitude_ptr)
         return result_code
 
 
@@ -364,7 +363,7 @@ class Core:
         points_quantity_ptr = ffi.new("long *", points_quantity)
         interval_rate_ptr = ffi.new("double *", interval_rate)
         result_ptr = ffi.new("double *")
-        result_code = Core._lib.IV_getcurrenttrace(
+        result_code = Core.__lib.IV_getcurrenttrace(
             points_quantity_ptr, interval_rate_ptr, result_ptr)
         return result_code, result_ptr[0]
 
@@ -376,7 +375,7 @@ class Core:
         points_quantity_ptr = ffi.new("long *", points_quantity)
         interval_rate_ptr = ffi.new("double *", interval_rate)
         result_ptr = ffi.new("double *")
-        result_code = Core._lib.IV_getcurrentWE2trace(
+        result_code = Core.__lib.IV_getcurrentWE2trace(
             points_quantity_ptr, interval_rate_ptr, result_ptr)
         return result_code, result_ptr[0]
 
@@ -388,7 +387,7 @@ class Core:
         points_quantity_ptr = ffi.new("long *", points_quantity)
         interval_rate_ptr = ffi.new("double *", interval_rate)
         result_ptr = ffi.new("double *")
-        result_code = Core._lib.IV_getpotentialtrace(
+        result_code = Core.__lib.IV_getpotentialtrace(
             points_quantity_ptr, interval_rate_ptr, result_ptr)
         return result_code, result_ptr[0]
 
@@ -399,7 +398,7 @@ class Core:
     def IV_we32setchannel( channel_index):
         '''Select active WE32 channel (chan)'''
         channel_index_ptr = ffi.new("long *", channel_index)
-        result_code = Core._lib.IV_we32setchannel(channel_index_ptr)
+        result_code = Core.__lib.IV_we32setchannel(channel_index_ptr)
         return result_code
 
 
@@ -409,7 +408,7 @@ class Core:
             Use chan=0 to apply the same offset to all channels.'''
         channel_index_ptr = ffi.new("long *", channel_index)
         value_ptr = ffi.new("double *", value)
-        result_code = Core._lib.IV_we32setoffset(channel_index_ptr, value_ptr)
+        result_code = Core.__lib.IV_we32setoffset(channel_index_ptr, value_ptr)
         return result_code
 
 
@@ -419,7 +418,7 @@ class Core:
             with Nchan the number of channels (1..32)'''
         number_of_channels_index_ptr = ffi.new("long *", number_of_channels)
         value_ptr = ffi.new("double *", value)
-        result_code = Core._lib.IV_we32setoffsets(
+        result_code = Core.__lib.IV_we32setoffsets(
             number_of_channels_index_ptr, value_ptr)
         return result_code
 
@@ -430,7 +429,7 @@ class Core:
             with Nchan the number of channels (1..32)'''
         number_of_channels_index_ptr = ffi.new("long *", number_of_channels)
         values_ptr = ffi.new("double *")
-        result_code = Core._lib.IV_we32getoffsets(
+        result_code = Core.__lib.IV_we32getoffsets(
             number_of_channels_index_ptr, values_ptr)
         return result_code, values_ptr[0]
 
@@ -440,7 +439,7 @@ class Core:
         '''REVISE! Returns array with 32 WE32 current values,
             that are measured simultaneously'''
         current_values_ptr = ffi.new("double *")
-        result_code = Core._lib.IV_we32readcurrents(current_values_ptr)
+        result_code = Core.__lib.IV_we32readcurrents(current_values_ptr)
         return result_code, current_values_ptr[0]
 
         # Method functions
@@ -452,7 +451,7 @@ class Core:
             method_file_path represents the full path to the file.'''
         method_file_path_ptr = ffi.new(
             "char []", method_file_path.encode("utf-8"))
-        result_code = Core._lib.IV_readmethod(method_file_path_ptr)
+        result_code = Core.__lib.IV_readmethod(method_file_path_ptr)
         return result_code, ffi.string(method_file_path_ptr).decode("utf-8")
 
 
@@ -462,7 +461,7 @@ class Core:
             method_file_path represents the full path to the new file.'''
         method_file_path_ptr = ffi.new(
             "char []", method_file_path.encode("utf-8"))
-        result_code = Core._lib.IV_savemethod(method_file_path_ptr)
+        result_code = Core.__lib.IV_savemethod(method_file_path_ptr)
         return result_code, ffi.string(method_file_path_ptr).decode("utf-8")
 
 
@@ -474,14 +473,14 @@ class Core:
             then the procedure is loaded from the file and started.'''
         method_file_path_ptr = ffi.new(
             "char []", method_file_path.encode("utf-8"))
-        result_code = Core._lib.IV_startmethod(method_file_path_ptr)
+        result_code = Core.__lib.IV_startmethod(method_file_path_ptr)
         return result_code, ffi.string(method_file_path_ptr).decode("utf-8")
 
 
     @staticmethod
     def IV_abort():
         '''Aborts the ongoing method procedure'''
-        return Core._lib.IV_abort()
+        return Core.__lib.IV_abort()
 
 
     @staticmethod
@@ -490,7 +489,7 @@ class Core:
             method_file_path represents the full path to the new file.'''
         method_data_file_path_ptr = ffi.new(
             "char []", method_data_file_path.encode("utf-8"))
-        result_code = Core._lib.IV_savedata(method_data_file_path_ptr)
+        result_code = Core.__lib.IV_savedata(method_data_file_path_ptr)
         return result_code, ffi.string(method_data_file_path_ptr).decode("utf-8")
 
 
@@ -501,7 +500,7 @@ class Core:
         parameter_name_ptr = ffi.new("char []", parameter_name.encode("utf-8"))
         parameter_value_ptr = ffi.new(
             "char []", parameter_value.encode("utf-8"))
-        result_code = Core._lib.IV_setmethodparameter(
+        result_code = Core.__lib.IV_setmethodparameter(
             parameter_name_ptr, parameter_value_ptr)
         return result_code
 
@@ -510,7 +509,7 @@ class Core:
     def IV_Ndatapoints():
         '''Returns actual available number of datapoints: indicates the progress during a run'''
         data_point_ptr = ffi.new("long *")
-        result_code = Core._lib.IV_Ndatapoints(data_point_ptr)
+        result_code = Core.__lib.IV_Ndatapoints(data_point_ptr)
         return result_code, data_point_ptr[0]
 
 
@@ -523,7 +522,7 @@ class Core:
         measured_value1_ptr = ffi.new("double *")
         measured_value2_ptr = ffi.new("double *")
         measured_value3_ptr = ffi.new("double *")
-        result_code = Core._lib.IV_getdata(
+        result_code = Core.__lib.IV_getdata(
             selected_data_point_index_ptr, measured_value1_ptr, measured_value2_ptr, measured_value3_ptr)
         return result_code, measured_value1_ptr[0], measured_value2_ptr[0], measured_value3_ptr[0]
 
@@ -537,7 +536,7 @@ class Core:
         measured_value1_ptr = ffi.new("double *")
         measured_value2_ptr = ffi.new("double *")
         measured_value3_ptr = ffi.new("double *")
-        result_code = Core._lib.IV_getdatafromline(
+        result_code = Core.__lib.IV_getdatafromline(
             selected_data_point_index_ptr,
             selected_line_index_ptr,
             measured_value1_ptr,
