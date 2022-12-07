@@ -40,7 +40,7 @@ class PyviumVerifiers:
             raise NoDeviceDetectedError
 
     @staticmethod
-    def verify_device_available():
+    def verify_device_is_available():
         '''Raise exception if the connected device/s are not available at the moment'''
         device_status = Core.IV_getdevicestatus()
         if device_status == 2:
