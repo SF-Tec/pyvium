@@ -11,15 +11,19 @@ class Pyvium:
         '''Open the driver to manipulate the Ivium software'''
         if Core.is_driver_open():
             Core.IV_close()
-            
         Core.IV_open()
-
         try:
             PyviumVerifiers.verify_iviumsoft_is_running()
         except:
             Core.IV_close()
             raise
 
+    @staticmethod
+    def close_driver():
+        '''Closes the iviumSoft driver'''
+        PyviumVerifiers.verify_driver_is_open()
+        Core.IV_close()
+    
     @staticmethod
     def get_max_device_number():
         '''Returns the maximum number of devices that can be managed by IviumSoft'''
