@@ -1,5 +1,5 @@
 ## Pyvium and Core methods
-:white_check_mark: working method
+:white_check_mark: ready
 :small_orange_diamond: under development
 :no_entry_sign: not working
 
