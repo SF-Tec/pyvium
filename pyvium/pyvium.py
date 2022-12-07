@@ -27,10 +27,7 @@ class Pyvium:
     @staticmethod
     def get_max_device_number():
         '''Returns the maximum number of devices that can be managed by IviumSoft'''
-        '''Returns:
-                    crash if the driver is not open
-                    24 rest of cases (no device, device not conected, device connected, device bussy...)
-        '''
+        PyviumVerifiers.verify_driver_is_open()
         return Core.IV_MaxDevices()
 
     @staticmethod
