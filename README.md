@@ -7,7 +7,7 @@ This module uses a dll from the IviumSoft application. You need to have this sof
 
 ## Installation
 
-Install PYVIUM CORE easily with pip:
+Install PYVIUM easily with pip:
 
 ```
 pip install pyvium
