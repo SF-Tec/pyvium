@@ -1,5 +1,5 @@
 class DeviceBusyError(Exception):
     '''Raised when the IviumSoft software all devices are busy'''
-    def __init__(self, message = "There is no available device. Please, connect one."):
+    def __init__(self, message = "The selected device is busy, connect/select other device or wait till available."):
         self.message = message
         super().__init__(self.message)
