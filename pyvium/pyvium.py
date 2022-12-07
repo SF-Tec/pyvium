@@ -31,25 +31,24 @@ class Pyvium:
         return Core.IV_MaxDevices()
 
     @staticmethod
-    def get_device_serial_number():
-        '''Returns the serial number of the currently selected device'''
-        '''Returns:
-                    crash if the driver is not open
-                    -1,'' --> no iviumsoft or driver opened with no iviumsoft
-                    0,'' --> not conected CompacStat/OctoStat..., no device (or driver opened with no device?, check with DemoStat)
-                    0,'sn' --> device not conected (at least for DemoStat), not working for CompacStat or OctoStat (at least)
-                    0,'sn' --> conected device (compacstat gives "BXXX" instead of "bXXX" when usb powered, Octostat gives "Oct-1"...)
-        '''
-        result_code, serial_number = Core.IV_readSN()
-
-        return result_code, serial_number
-
-    @staticmethod
     def select_iviumsoft_instance(iviumsoft_instance_number):
         '''It allows to select one instance of the currently running IviumSoft instances'''
-        result_code = Core.IV_selectdevice(iviumsoft_instance_number)
+        PyviumVerifiers.verify_driver_is_open()
+        Core.IV_selectdevice(iviumsoft_instance_number)
+        if not Core.IV_VersionCheck() == 1:
+            Core.IV_selectdevice()
+            raise Exception('no Iviumsoft on instance number '+ str(iviumsoft_instance_number))
 
-        return result_code
+    @staticmethod
+    def get_device_serial_number():
+        '''Returns the serial number of the currently selected device if available'''
+        # 0,'' --> not conected CompacStat/OctoStat..., no device (or driver opened with no device?, check with DemoStat)
+        # 0,'sn' --> device not conected (at least for DemoStat), not working for CompacStat or OctoStat (at least)
+        # 0,'sn' --> conected device (compacstat gives "BXXX" instead of "bXXX" when usb powered, Octostat gives "Oct-1"...)
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        result_code, serial_number = Core.IV_readSN()
+        return result_code, serial_number
 
     @staticmethod
     def connect_device():
