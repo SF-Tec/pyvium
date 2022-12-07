@@ -5,7 +5,7 @@
 
 | Pyvium Methods                                        | Core Methods                              |
 | ----------------------------------------------------- | ----------------------------------------- |
-| :small_orange_diamond: open_driver()                  | :heavy_check_mark: IV_open()              |  
+| :heavy_check_mark: open_driver()                      | :heavy_check_mark: IV_open()              |  
 | :small_orange_diamond: close_driver()                 | :heavy_check_mark: IV_close()             |
 | :small_orange_diamond: get_max_device_number()        | :heavy_check_mark: IV_MaxDevices()        |
 | :small_orange_diamond: select_iviumsoft_instance(int) | :heavy_check_mark: IV_selectdevice(int)   |
