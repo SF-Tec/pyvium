@@ -58,4 +58,4 @@
 |      |  :white_check_mark: IV_Ndatapoints(value)|
 |      |  :white_check_mark: IV_getdata(pointnr, x, y, z)|
 |      |  :white_check_mark: IV_getdatafromline(pointnr, scannr, x, y, z)|
-|      |  :white_check_mark: IV_getDbFileName(fname)|
+|      |  :small_orange_diamond: IV_getDbFileName(fname)|
