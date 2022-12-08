@@ -39,8 +39,8 @@
 |                                                       |  :heavy_check_mark: IV_setmuxchannel(value)|
 |                                                       |  :heavy_check_mark: IV_setdigout(value)|
 |                                                       |  :heavy_check_mark: IV_getdigin(value)|
-|                                                       |  :heavy_check_mark: IV_setfrequency(value)|
-|                                                       |  :heavy_check_mark: IV_setamplitude(value)|
+|  :small_orange_diamond: set_ac_frequency()            |  :heavy_check_mark: IV_setfrequency(value)|
+|  :small_orange_diamond: set_ac_amplitude()            |  :heavy_check_mark: IV_setamplitude(value)|
 |                                                       |  :heavy_check_mark: IV_getcurrenttrace(npoints, rate, values)|
 |                                                       |  :heavy_check_mark: IV_getcurrentWE2trace(npoints, rate, values)|
 |      |  :heavy_check_mark: IV_getpotentialtrace(npoints, rate, values)|
