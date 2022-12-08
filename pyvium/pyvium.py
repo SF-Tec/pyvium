@@ -44,7 +44,7 @@ class Pyvium:
         return result_code, serial_number
 
     @staticmethod
-    def select_iviumsoft_instance(iviumsoft_instance_number):
+    def select_iviumsoft_instance(iviumsoft_instance_number: int):
         '''It allows to select one instance of the currently running IviumSoft instances'''
         result_code = Core.IV_selectdevice(iviumsoft_instance_number)
 
@@ -84,7 +84,7 @@ class Pyvium:
         return result_code, data_point
 
     @staticmethod
-    def get_data_point(data_point_index):
+    def get_data_point(data_point_index: int):
         '''Get the data from a datapoint with index int, returns 3 values that depend on
             the used technique. For example LSV/CV methods return (E/I/0) Transient methods
             return (time/I,E/0), Impedance methods return (Z1,Z2,freq) etc.'''
@@ -94,7 +94,7 @@ class Pyvium:
         return result_code, value1, value2, value3
 
     @staticmethod
-    def get_data_point_from_scan(data_point_index, scan_index):
+    def get_data_point_from_scan(data_point_index: int, scan_index: int):
         '''Same as get_data_point, but with the additional scan_index parameter.
             This function will allow reading data from non-selected (previous) scans.'''
         result_code, value1, value2, value3 = Core.IV_getdatafromline(
@@ -117,7 +117,7 @@ class Pyvium:
         return result_code, cell_status_labels
 
     @staticmethod
-    def load_method(method_file_path):
+    def load_method(method_file_path: str):
         '''Loads method procedure previously saved to a file.
             method_file_path represents the full path to the file.'''
         result_code, path = Core.IV_readmethod(method_file_path)
@@ -125,7 +125,7 @@ class Pyvium:
         return result_code, path
 
     @staticmethod
-    def save_method(method_file_path):
+    def save_method(method_file_path: str):
         '''Saves currently loaded method procedure to a file.
             method_file_path represents the full path to the new file.'''
         result_code, path = Core.IV_savemethod(method_file_path)
@@ -143,7 +143,7 @@ class Pyvium:
         return result_code, path
 
     @staticmethod
-    def save_method_data(method_data_file_path):
+    def save_method_data(method_data_file_path: str):
         '''Saves the results of the last method execution into a file.
             method_file_path represents the full path to the new file.'''
         result_code, path = Core.IV_savedata(method_data_file_path)
@@ -158,7 +158,7 @@ class Pyvium:
         return result_code
 
     @staticmethod
-    def set_method_parameter_value(parameter_name, parameter_value):
+    def set_method_parameter_value(parameter_name: str, parameter_value: str):
         '''Allows updating the parameter values for the currently loaded method procedrue.
             It only works for text based parameters and dropdowns (multiple option selectors).'''
         result_code = Core.IV_setmethodparameter(
@@ -167,7 +167,7 @@ class Pyvium:
         return result_code
 
     @staticmethod
-    def set_connection_mode(connection_mode_number):
+    def set_connection_mode(connection_mode_number: int):
         ''' Select the connection mode for the currently connected device.
             The available modes depend on the connected device.
             These are all the supported connection modes: 0=off; 1=EStat4EL(default), 2=EStat2EL,
@@ -178,7 +178,7 @@ class Pyvium:
         return result_code
 
     @staticmethod
-    def get_current_trace(points_quantity, interval_rate):
+    def get_current_trace(points_quantity: int, interval_rate: float):
         '''Returns a sequence of measured currents at defined samplingrate
             (npoints, interval, array of double): npoints<=256, interval: 10us to 20ms'''
         result_code, current = Core.IV_getcurrenttrace(
@@ -187,7 +187,7 @@ class Pyvium:
         return result_code, current
 
     @staticmethod
-    def get_current_we2_trace(points_quantity, interval_rate):
+    def get_current_we2_trace(points_quantity: int, interval_rate: float):
         '''Returns a sequence of measured WE2 currents at defined samplingrate
             (npoints, interval, array of double): npoints<=256, interval: 10us to 20ms'''
         result_code, current = Core.IV_getcurrentWE2trace(
@@ -196,7 +196,7 @@ class Pyvium:
         return result_code, current
 
     @staticmethod
-    def get_potencial_trace(points_quantity, interval_rate):
+    def get_potencial_trace(points_quantity: int, interval_rate: float):
         '''Returns a sequence of measured potentials at defined samplingrate
             (npoints, interval, array of double): npoints<=256, interval: 10us to 20ms'''
         result_code, potential = Core.IV_getpotentialtrace(
@@ -205,13 +205,17 @@ class Pyvium:
         return result_code, potential
 
     @staticmethod
-    def set_ac_amplitude(ac_amplitude):
+    def set_ac_amplitude(ac_amplitude: float):
         '''Set the value of the ac amplitude in Volts'''
-        result_code, amplitude = Core.IV_setamplitude(ac_amplitude)
-        return result_code, amplitude
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+
+        Core.IV_setamplitude(ac_amplitude)
 
     @staticmethod
-    def set_ac_frequency(ac_frequency):
+    def set_ac_frequency(ac_frequency: float):
         '''Set the value of the ac frequency in Hz'''
-        result_code, frequency = Core.IV_setfrequency(ac_frequency)
-        return result_code, frequency
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+
+        Core.IV_setfrequency(ac_frequency)
