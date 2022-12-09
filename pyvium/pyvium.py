@@ -48,9 +48,14 @@ class Pyvium:
         return result_code, status_labels[str(result_code)]
     
     @staticmethod
+    def is_iviumsoft_running() -> bool:
+        '''It returns true if, at least, one instance of IviumSoft is running'''
+        PyviumVerifiers.verify_driver_is_open()
+        return not Core.IV_getdevicestatus() == -1
+    
+    @staticmethod
     def get_active_iviumsoft_instances():
         '''Returns a list of active(opened) IviumSoft instances'''
-        
         PyviumVerifiers.verify_driver_is_open()
         active_instances = []
         for instance_number in range(1,32):
@@ -62,8 +67,7 @@ class Pyvium:
 
     @staticmethod
     def select_iviumsoft_instance(iviumsoft_instance_number: int):
-        '''It allows to select one instance of the currently running IviumSoft instances'''
-        
+        '''It allows to select one instance of the currently running IviumSoft instances'''  
         PyviumVerifiers.verify_driver_is_open()
         active_instances = Pyvium.get_active_iviumsoft_instances()
         if iviumsoft_instance_number not in active_instances:
@@ -99,16 +103,10 @@ class Pyvium:
         Core.IV_connect(0)
 
     @staticmethod
-    def get_dll_version():
+    def get_dll_version()-> int:
         '''Returns the version of the IviumSoft dll'''
         PyviumVerifiers.verify_driver_is_open()
         return Core.IV_VersionDll()
-
-    @staticmethod
-    def is_iviumsoft_running() -> bool:
-        '''It returns true if, at least, one instance of IviumSoft is running'''
-        PyviumVerifiers.verify_driver_is_open()
-        return not Core.IV_getdevicestatus() == -1
 
     @staticmethod
     def select_channel(chanel_number: int):
@@ -123,6 +121,23 @@ class Pyvium:
 
 
     # Direct functions
+    @staticmethod
+    def get_cell_status() -> list :
+        '''Returns cell status labels
+            ["I_ovl", "Anin1_ovl","E_ovl", "CellOff_button pressed", "Cell on"]'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        result_code, cell_status_bits = Core.IV_getcellstatus()
+        cell_status_labels = []
+        if result_code == 0:
+            labels = ["I_ovl", "", "Anin1_ovl", "E_ovl",
+                      "", "CellOff_button pressed", "Cell on"]
+            for i, label in enumerate(labels, 2):
+                if cell_status_bits & (1 << i) and label:
+                    cell_status_labels.append(label)
+        return cell_status_labels
+
     @staticmethod
     def get_data_points_quantity():
         '''Returns actual available number of datapoints: indicates the progress during a run'''
@@ -149,19 +164,6 @@ class Pyvium:
 
         return result_code, value1, value2, value3
 
-    @staticmethod
-    def get_cell_status():
-        '''Returns cell status labels
-            ["I_ovl", "Anin1_ovl","E_ovl", "CellOff_button pressed", "Cell on"]'''
-        result_code, cell_status_bits = Core.IV_getcellstatus()
-        cell_status_labels = []
-        if result_code == 0:
-            labels = ["I_ovl", "", "Anin1_ovl", "E_ovl",
-                      "", "CellOff_button pressed", "Cell on"]
-            for i, label in enumerate(labels, 2):
-                if cell_status_bits & (1 << i) and label:
-                    cell_status_labels.append(label)
-        return result_code, cell_status_labels
 
     @staticmethod
     def load_method(method_file_path: str):
