@@ -259,7 +259,6 @@ class Pyvium:
         '''Set the value of the ac amplitude in Volts'''
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
-
         Core.IV_setamplitude(ac_amplitude)
 
     @staticmethod
