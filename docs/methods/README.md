@@ -26,10 +26,10 @@
 | :heavy_check_mark: set_connection_mode()              |  :heavy_check_mark: IV_setconnectionmode(value)   |
 | :heavy_check_mark: set_cell_on()                      |  :heavy_check_mark: IV_setcellon(cellon)          |
 | :heavy_check_mark: set_cell_off()                     |        |
-|                                                       |  :heavy_check_mark: IV_setpotential(value)|
-|                                                       |  :heavy_check_mark: IV_setpotentialWE2(value)|
-|                                                       |  :heavy_check_mark: IV_setcurrent(value)|
-|                                                       |  :heavy_check_mark: IV_getpotential(value)|
+| :heavy_check_mark: set_potential(float)               |  :heavy_check_mark: IV_setpotential(value)|
+| :heavy_check_mark: set_we2_potential(float)           |  :heavy_check_mark: IV_setpotentialWE2(value)|
+| :heavy_check_mark: set_curretn(float)                 |  :heavy_check_mark: IV_setcurrent(value)|
+| :heavy_check_mark: get_potential()                    |  :heavy_check_mark: IV_getpotential(value)|
 |                                                       |  :heavy_check_mark: IV_setcurrentrange(value)|
 |                                                       |  :heavy_check_mark: IV_setcurrentrangeWE2(value)|
 |                                                       |  :heavy_check_mark: IV_getcurrent(value)|

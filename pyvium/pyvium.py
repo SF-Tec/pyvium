@@ -192,7 +192,7 @@ class Pyvium:
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
-        _,potential_value = Core.IV_getpotential()
+        _, potential_value = Core.IV_getpotential()
         return potential_value
 
     @staticmethod
