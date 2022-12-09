@@ -8,18 +8,19 @@
 | :heavy_check_mark: open_driver()                      | :heavy_check_mark: IV_open()              |  
 | :heavy_check_mark: close_driver()                     | :heavy_check_mark: IV_close()             |
 | :heavy_check_mark: get_max_device_number()            | :heavy_check_mark: IV_MaxDevices()        |
-| :small_orange_diamond: select_iviumsoft_instance(int) | :heavy_check_mark: IV_selectdevice(int)   |
+| :heavy_check_mark: get_active_iviumsoft_instances(int)|                                           |
+| :heavy_check_mark: select_iviumsoft_instance(int)     | :heavy_check_mark: IV_selectdevice(int)   |
 | :small_orange_diamond: get_device_status()            | :heavy_check_mark: IV_getdevicestatus()   |
-| :small_orange_diamond: get_device_serial_number()     | :heavy_check_mark: IV_readSN()            |
-| :small_orange_diamond: connect_device()               | :heavy_check_mark: IV_connect(int)        |
-| :small_orange_diamond: disconnect_device()            |^                                          |
+| :heavy_check_mark: get_device_serial_number()         | :heavy_check_mark: IV_readSN()            |
+| :heavy_check_mark: connect_device()                   | :heavy_check_mark: IV_connect(int)        |
+| :heavy_check_mark: disconnect_device()                |^                                          |
 |                                                       | :heavy_check_mark: IV_VersionHost(version)|
 | :small_orange_diamond: get_dll_version()              | :heavy_check_mark: IV_VersionDll()        |
-| :small_orange_diamond:  is_iviumsoft_running()        | :heavy_check_mark: IV_VersionCheck()      |
+| :heavy_check_mark:  is_iviumsoft_running()            | :heavy_check_mark: IV_VersionCheck()      |
 |                                                       | :heavy_check_mark: IV_HostHandle()                |
 |                                                       | :heavy_check_mark: IV_VersionDllFile()            |
 |                                                       | :heavy_check_mark: IV_VersionDllFileStr()         |
-| :small_orange_diamond: select_channel(int)            | :heavy_check_mark: IV_SelectChannel(int)          |
+| :heavy_check_mark: select_channel(int)                | :heavy_check_mark: IV_SelectChannel(int)          |
 | :small_orange_diamond: get_cell_status()              |  :heavy_check_mark: IV_getcellstatus()            |
 | :small_orange_diamond: set_connection_mode()          |  :heavy_check_mark: IV_setconnectionmode(value)   |
 |                                                       |  :heavy_check_mark: IV_setcellon(cellon)          |
