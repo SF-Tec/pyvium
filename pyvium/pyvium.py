@@ -216,6 +216,14 @@ class Pyvium:
         PyviumVerifiers.verify_iviumsoft_is_running()
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
         Core.IV_setcurrentrange(current_range_number)
+
+    @staticmethod
+    def set_we2_current_range(current_range_number: int):
+        '''Set current range for BiStat, 0=10mA, 1=1mA, etc,'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setcurrentrangeWE2(current_range_number)
         
     @staticmethod
     def get_data_points_quantity():
