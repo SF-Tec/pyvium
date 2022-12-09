@@ -233,6 +233,15 @@ class Pyvium:
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
         _, current_value = Core.IV_getcurrent()
         return current_value
+
+    @staticmethod
+    def get_we2_current() -> float:
+        '''Returns measured current from WE2 (bipotentiostat)'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        _, current_value = Core.IV_getcurrentWE2()
+        return current_value
         
     @staticmethod
     def get_data_points_quantity():
