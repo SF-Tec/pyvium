@@ -171,6 +171,14 @@ class Pyvium:
         Core.IV_setpotential(potential_value)
 
     @staticmethod
+    def set_we2_potential(potential_we2_value: float):
+        '''Set BiStat offset potential'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setpotentialWE2(potential_we2_value)
+
+    @staticmethod
     def get_data_points_quantity():
         '''Returns actual available number of datapoints: indicates the progress during a run'''
         result_code, data_point = Core.IV_Ndatapoints()
