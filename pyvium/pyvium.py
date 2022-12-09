@@ -258,6 +258,17 @@ class Pyvium:
         PyviumVerifiers.verify_iviumsoft_is_running()
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
         Core.IV_setstability(stability_number)
+
+    @staticmethod
+    def set_bistat_mode(value: int):
+        '''REVISE! --> IV_bistat_mode(int) in documentation
+            Select mode for BiStat, for int 0=standard, 1=scanning
+            This bistat_mode function also can be used to control the Automatic E-ranging function of the instrument;
+            0=AutoEranging off; 1=AutoEranging on'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()  
+        Core.IV_setstability(value)
         
     @staticmethod
     def get_data_points_quantity():
