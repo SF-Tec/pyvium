@@ -139,6 +139,18 @@ class Pyvium:
         return cell_status_labels
 
     @staticmethod
+    def set_connection_mode(connection_mode_number: int):
+        ''' Select the connection mode for the currently connected device.
+            The available modes depend on the connected device.
+            These are all the supported connection modes: 0=off; 1=EStat4EL(default), 2=EStat2EL,
+            3=EstatDummy1,4=EStatDummy2,5=EstatDummy3,6=EstatDummy4
+            7=Istat4EL, 8=Istat2EL, 9=IstatDummy, 10=BiStat4EL, 11=BiStat2EL'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setconnectionmode(connection_mode_number)
+
+    @staticmethod
     def get_data_points_quantity():
         '''Returns actual available number of datapoints: indicates the progress during a run'''
         result_code, data_point = Core.IV_Ndatapoints()
@@ -212,17 +224,6 @@ class Pyvium:
             It only works for text based parameters and dropdowns (multiple option selectors).'''
         result_code = Core.IV_setmethodparameter(
             parameter_name, parameter_value)
-
-        return result_code
-
-    @staticmethod
-    def set_connection_mode(connection_mode_number: int):
-        ''' Select the connection mode for the currently connected device.
-            The available modes depend on the connected device.
-            These are all the supported connection modes: 0=off; 1=EStat4EL(default), 2=EStat2EL,
-            3=EstatDummy1,4=EStatDummy2,5=EstatDummy3,6=EstatDummy4
-            7=Istat4EL, 8=Istat2EL, 9=IstatDummy, 10=BiStat4EL, 11=BiStat2EL'''
-        result_code = Core.IV_setconnectionmode(connection_mode_number)
 
         return result_code
 
