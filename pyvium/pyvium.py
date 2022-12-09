@@ -187,10 +187,18 @@ class Pyvium:
         Core.IV_setpotentialWE2(current_value)
 
     @staticmethod
+    def get_potential() -> float:
+        '''Returns measured potential'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        _,potential_value = Core.IV_getpotential()
+        return potential_value
+
+    @staticmethod
     def get_data_points_quantity():
         '''Returns actual available number of datapoints: indicates the progress during a run'''
         result_code, data_point = Core.IV_Ndatapoints()
-
         return result_code, data_point
 
     @staticmethod
