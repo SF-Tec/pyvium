@@ -242,6 +242,14 @@ class Pyvium:
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
         _, current_value = Core.IV_getcurrentWE2()
         return current_value
+    
+    @staticmethod
+    def set_filter(filter_number: int):
+        '''Set filter, for int :0=1MHz, 1=100kHz, 2=10kHz, 3=1kHz, 4=10Hz'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setfilter(filter_number)
         
     @staticmethod
     def get_data_points_quantity():
