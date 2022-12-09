@@ -32,9 +32,30 @@ class Pyvium:
         return Core.IV_MaxDevices()
 
     @staticmethod
+    def get_device_status() -> tuple[int, str]:
+        '''It returns -1 (no IviumSoft), 0 (not connected), 1 (available_idle), 2 (available_busy),
+            3 (no device available)'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        status_labels = {
+            '-1': 'no IviumSoft',
+            '0': 'connected',
+            '1': 'available_idle',
+            '2': 'available_busy',
+            '3': 'no device available'
+        }
+        result_code = Core.IV_getdevicestatus()
+        return result_code, status_labels[str(result_code)]
+
+    @staticmethod
+    def is_iviumsoft_running() -> bool:
+        '''It returns true if if the selected instance of IviumSoft is running'''
+        PyviumVerifiers.verify_driver_is_open()
+        return not Core.IV_getdevicestatus() == -1
+
+    @staticmethod
     def get_active_iviumsoft_instances():
         '''Returns a list of active(opened) IviumSoft instances'''
-
         PyviumVerifiers.verify_driver_is_open()
         active_instances = []
         first_active_instance_number = 0
@@ -49,7 +70,7 @@ class Pyvium:
 
         if first_active_instance_number == 0:
             first_active_instance_number = 1
-    
+
         Core.IV_selectdevice(first_active_instance_number)
         return active_instances
 
@@ -80,34 +101,118 @@ class Pyvium:
     @staticmethod
     def connect_device():
         '''It connects the currently selected device'''
-        return Core.IV_connect(1)
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.veryfy_device_is_connected_to_computer()
+        Core.IV_connect(1)
 
     @staticmethod
     def disconnect_device():
         '''It disconnects the currently selected device'''
-        return Core.IV_connect(0)
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.veryfy_device_is_connected_to_computer()
+        Core.IV_connect(0)
 
     @staticmethod
-    def get_dll_version():
+    def get_dll_version() -> int:
         '''Returns the version of the IviumSoft dll'''
+        PyviumVerifiers.verify_driver_is_open()
         return Core.IV_VersionDll()
 
     @staticmethod
-    def is_iviumsoft_running():
-        '''It returns true if, at least, one instance of IviumSoft is running'''
-        return Core.IV_VersionCheck() == 1
+    def select_channel(chanel_number: int):
+        '''Sending the integer value communicates with Multichannel control:
+            if not yet active, the [int] number of tabs is automatically opened and the [int] tab becomes active;
+            if Ivium-n-Soft is active already, the [int] tab becomes active. 
+            Now the channel/instrument that is connected to this tab can be controlled. 
+            If no instrument is connected, the next available instrument in the list can be connected (IV_connect) and controlled.'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        Core.IV_SelectChannel(chanel_number)
+
+    # Direct functions
 
     @staticmethod
-    def get_device_status():
-        '''It returns -1 (no IviumSoft), 0 (not connected), 1 (available_idle), 2 (available_busy),
-            3 (no device available)'''
-        return Core.IV_getdevicestatus()
+    def get_cell_status() -> list:
+        '''Returns cell status labels
+            ["I_ovl", "Anin1_ovl","E_ovl", "CellOff_button pressed", "Cell on"]'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        _, cell_status_bits = Core.IV_getcellstatus()
+        cell_status_labels = []
+        
+        labels = ["I_ovl", "", "Anin1_ovl", "E_ovl",
+                "", "CellOff_button pressed", "Cell on"]
+        for i, label in enumerate(labels, 2):
+            if cell_status_bits & (1 << i) and label:
+                cell_status_labels.append(label)
+        if len(cell_status_labels) == 0:
+            cell_status_labels = ['Cell off']
+        return cell_status_labels
+
+    @staticmethod
+    def set_connection_mode(connection_mode_number: int):
+        ''' Select the connection mode for the currently connected device.
+            The available modes depend on the connected device.
+            These are all the supported connection modes: 0=off; 1=EStat4EL(default), 2=EStat2EL,
+            3=EstatDummy1,4=EStatDummy2,5=EstatDummy3,6=EstatDummy4
+            7=Istat4EL, 8=Istat2EL, 9=IstatDummy, 10=BiStat4EL, 11=BiStat2EL'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setconnectionmode(connection_mode_number)
+
+    @staticmethod
+    def set_cell_on():
+        '''Set cell off '''
+        if 'Cell off' in Pyvium.get_cell_status():
+            Core.IV_setcellon(1)
+
+    @staticmethod
+    def set_cell_off():
+        '''Set cell on '''
+        if 'Cell on' in Pyvium.get_cell_status():
+            Core.IV_setcellon(0)
+
+    @staticmethod
+    def set_potential(potential_value: float):
+        '''Set cell potential'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setpotential(potential_value)
+
+    @staticmethod
+    def set_we2_potential(potential_we2_value: float):
+        '''Set BiStat offset potential'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setpotentialWE2(potential_we2_value)
+
+    @staticmethod
+    def set_current(current_value: float):
+        '''Set cell current (galvanostatic mode)'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setpotentialWE2(current_value)
+
+    @staticmethod
+    def get_potential() -> float:
+        '''Returns measured potential'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        _, potential_value = Core.IV_getpotential()
+        return potential_value
 
     @staticmethod
     def get_data_points_quantity():
         '''Returns actual available number of datapoints: indicates the progress during a run'''
         result_code, data_point = Core.IV_Ndatapoints()
-
         return result_code, data_point
 
     @staticmethod
@@ -128,20 +233,6 @@ class Pyvium:
             data_point_index, scan_index)
 
         return result_code, value1, value2, value3
-
-    @staticmethod
-    def get_cell_status():
-        '''Returns cell status labels
-            ["I_ovl", "Anin1_ovl","E_ovl", "CellOff_button pressed", "Cell on"]'''
-        result_code, cell_status_bits = Core.IV_getcellstatus()
-        cell_status_labels = []
-        if result_code == 0:
-            labels = ["I_ovl", "", "Anin1_ovl", "E_ovl",
-                      "", "CellOff_button pressed", "Cell on"]
-            for i, label in enumerate(labels, 2):
-                if cell_status_bits & (1 << i) and label:
-                    cell_status_labels.append(label)
-        return result_code, cell_status_labels
 
     @staticmethod
     def load_method(method_file_path: str):
@@ -194,17 +285,6 @@ class Pyvium:
         return result_code
 
     @staticmethod
-    def set_connection_mode(connection_mode_number: int):
-        ''' Select the connection mode for the currently connected device.
-            The available modes depend on the connected device.
-            These are all the supported connection modes: 0=off; 1=EStat4EL(default), 2=EStat2EL,
-            3=EstatDummy1,4=EStatDummy2,5=EstatDummy3,6=EstatDummy4
-            7=Istat4EL, 8=Istat2EL, 9=IstatDummy, 10=BiStat4EL, 11=BiStat2EL'''
-        result_code = Core.IV_setconnectionmode(connection_mode_number)
-
-        return result_code
-
-    @staticmethod
     def get_current_trace(points_quantity: int, interval_rate: float):
         '''Returns a sequence of measured currents at defined samplingrate
             (npoints, interval, array of double): npoints<=256, interval: 10us to 20ms'''
@@ -236,7 +316,6 @@ class Pyvium:
         '''Set the value of the ac amplitude in Volts'''
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
-
         Core.IV_setamplitude(ac_amplitude)
 
     @staticmethod
