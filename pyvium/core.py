@@ -134,7 +134,7 @@ class Core:
 
     @staticmethod
     def IV_VersionCheck() -> int:
-        '''It returns 1 if, at least, one instance of IviumSoft is running'''
+        '''It returns 1 if the selected instance of IviumSoft is running'''
         return Core.__lib.IV_VersionCheck()
 
     @staticmethod
