@@ -28,7 +28,22 @@ class Pyvium:
                     24 rest of cases (no device, device not conected, device connected, device bussy...)
         '''
         return Core.IV_MaxDevices()
-
+    
+    @staticmethod
+    def IV_get_device_status() -> tuple[int, str]:
+        '''It returns -1 (no IviumSoft), 0 (not connected), 1 (available_idle), 2 (available_busy),
+            3 (no device available)'''
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        status_labels = {
+            '-1': 'no IviumSoft',
+            '0': 'connected',
+            '1': 'available_idle',
+            '2': 'available_busy',
+            '3': 'no device available'
+        }
+        result_code = Core.IV_getdevicestatus()
+        return result_code, status_labels[str(result_code)]
+    
     @staticmethod
     def get_device_serial_number():
         '''Returns the serial number of the currently selected device'''
