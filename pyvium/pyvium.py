@@ -95,6 +95,19 @@ class Pyvium:
         return not Core.IV_getdevicestatus() == -1
 
     @staticmethod
+    def select_channel(chanel_number: int):
+        '''Sending the integer value communicates with Multichannel control:
+            if not yet active, the [int] number of tabs is automatically opened and the [int] tab becomes active;
+            if Ivium-n-Soft is active already, the [int] tab becomes active. 
+            Now the channel/instrument that is connected to this tab can be controlled. 
+            If no instrument is connected, the next available instrument in the list can be connected (IV_connect) and controlled.'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        Core.IV_SelectChannel(chanel_number)
+
+
+    # Direct functions
+    @staticmethod
     def get_data_points_quantity():
         '''Returns actual available number of datapoints: indicates the progress during a run'''
         result_code, data_point = Core.IV_Ndatapoints()
