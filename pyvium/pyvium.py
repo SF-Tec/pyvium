@@ -163,6 +163,15 @@ class Pyvium:
             Core.IV_setcellon(0)
 
     @staticmethod
+    def set_potential(potential_value: float):
+        '''Set cell potential'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        PyviumVerifiers.verify_cell_is_on()
+        Core.__lib.IV_setpotential(potential_value)
+
+    @staticmethod
     def get_data_points_quantity():
         '''Returns actual available number of datapoints: indicates the progress during a run'''
         result_code, data_point = Core.IV_Ndatapoints()
