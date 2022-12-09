@@ -177,6 +177,14 @@ class Pyvium:
         PyviumVerifiers.verify_iviumsoft_is_running()
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
         Core.IV_setpotentialWE2(potential_we2_value)
+    
+    @staticmethod
+    def set_current(current_value: float):
+        '''Set cell current (galvanostatic mode)'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setpotentialWE2(current_value)
 
     @staticmethod
     def get_data_points_quantity():
