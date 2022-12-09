@@ -1,7 +1,7 @@
 '''This module is a simple wrapper around the "Software development driver DLL" for IviumSoft.'''
 from .core import Core
 from .pyvium_verifiers import PyviumVerifiers
-from .errors import DeviceNotConnectedToIviumSoftError
+from .errors import DeviceNotConnectedToIviumSoftError, IviumSoftNotRunningError
 
 
 class Pyvium:
@@ -32,13 +32,28 @@ class Pyvium:
         return Core.IV_MaxDevices()
 
     @staticmethod
+    def get_active_iviumsoft_instances():
+        '''Returns a list of active(opened) IviumSoft instances'''
+        
+        PyviumVerifiers.verify_driver_is_open()
+        active_instances = []
+        for instance_number in range(1,32):
+            Core.IV_selectdevice(instance_number)
+            if not Core.IV_getdevicestatus() == -1:
+                active_instances.append(instance_number)
+        Core.IV_selectdevice(1)
+        return active_instances
+
+    @staticmethod
     def select_iviumsoft_instance(iviumsoft_instance_number):
         '''It allows to select one instance of the currently running IviumSoft instances'''
+        
         PyviumVerifiers.verify_driver_is_open()
+        active_instances = Pyvium.get_active_iviumsoft_instances()
+        if iviumsoft_instance_number not in active_instances:
+            error_msg = 'No IviumSoft on instance number {}, actual active instances list = {}'
+            raise IviumSoftNotRunningError(error_msg.format(iviumsoft_instance_number,active_instances))
         Core.IV_selectdevice(iviumsoft_instance_number)
-        if not Core.IV_VersionCheck() == 1:
-            Core.IV_selectdevice()
-            raise Exception('no Iviumsoft on instance number '+ str(iviumsoft_instance_number))
 
     @staticmethod
     def get_device_serial_number():
