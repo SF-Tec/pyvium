@@ -210,6 +210,14 @@ class Pyvium:
         return potential_value
 
     @staticmethod
+    def set_current_range(current_range_number: int):
+        '''Set current range, 0=10A, 1=1A, etc,'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setcurrentrange(current_range_number)
+        
+    @staticmethod
     def get_data_points_quantity():
         '''Returns actual available number of datapoints: indicates the progress during a run'''
         result_code, data_point = Core.IV_Ndatapoints()
