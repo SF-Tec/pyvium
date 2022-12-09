@@ -39,7 +39,7 @@
 | :heavy_check_mark: set_bistat_mode(int)               |  :heavy_check_mark: IV_setbistatmode(int)|
 | :heavy_check_mark: set_dac(int, float)                |  :heavy_check_mark: IV_setdac(int, float)|
 | :heavy_check_mark: set_adc(int)                       |  :heavy_check_mark: IV_getadc(int)       |
-|                                                       |  :heavy_check_mark: IV_setmuxchannel(int)|
+| :heavy_check_mark: set_mux_channel(int)               |  :heavy_check_mark: IV_setmuxchannel(int)|
 |                                                       |  :heavy_check_mark: IV_setdigout(value)|
 |                                                       |  :heavy_check_mark: IV_getdigin(value)|
 |  :heavy_check_mark: set_ac_frequency()                |  :heavy_check_mark: IV_setfrequency(value)|

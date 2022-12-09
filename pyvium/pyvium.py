@@ -286,7 +286,15 @@ class Pyvium:
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
         _, measured_voltage = Core.IV_getadc(channel_number)
         return measured_voltage
-        
+    
+    @staticmethod
+    def set_mux_channel(channel_number: int = 0):
+        '''Set channel of multiplexer, int=channelnr. starting from 0(default)'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setmuxchannel(channel_number)
+
     @staticmethod
     def get_data_points_quantity():
         '''Returns actual available number of datapoints: indicates the progress during a run'''
