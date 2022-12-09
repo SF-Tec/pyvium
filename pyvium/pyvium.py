@@ -250,6 +250,14 @@ class Pyvium:
         PyviumVerifiers.verify_iviumsoft_is_running()
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
         Core.IV_setfilter(filter_number)
+
+    @staticmethod
+    def set_stability(stability_number: int):
+        '''Set stability, for int 0=HighSpeed, 1=Standard, 2=HighStability'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setstability(stability_number)
         
     @staticmethod
     def get_data_points_quantity():
