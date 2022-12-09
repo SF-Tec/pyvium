@@ -277,6 +277,15 @@ class Pyvium:
         PyviumVerifiers.verify_iviumsoft_is_running()
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft() 
         Core.IV_setdac(channel_number, value)
+    
+    @staticmethod
+    def get_adc(channel_number: int) -> float:
+        '''REVISE! Returns measured voltage on external ADC port, int=channelnr. 0-7'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        _, measured_voltage = Core.IV_getadc(channel_number)
+        return measured_voltage
         
     @staticmethod
     def get_data_points_quantity():

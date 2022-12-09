@@ -283,11 +283,11 @@ class Core:
         return result_code
 
     @staticmethod
-    def IV_getadc(channel_number: int) -> tuple[int, int]:
+    def IV_getadc(channel_number: int) -> tuple[int, float]:
         '''REVISE! Returns measured voltage on external ADC port, int=channelnr. 0-7'''
         channel_number_ptr = ffi.new("long *", channel_number)
         measured_voltage_ptr = ffi.new("double *")
-        result_code = Core.__lib.IV_getdac(
+        result_code = Core.__lib.IV_getadc(
             channel_number_ptr, measured_voltage_ptr)
         return result_code, measured_voltage_ptr[0]
 
