@@ -24,7 +24,8 @@
 | :heavy_check_mark: select_channel(int)                | :heavy_check_mark: IV_SelectChannel(int)          |
 | :heavy_check_mark: get_cell_status()                  |  :heavy_check_mark: IV_getcellstatus()            |
 | :heavy_check_mark: set_connection_mode()              |  :heavy_check_mark: IV_setconnectionmode(value)   |
-|                                                       |  :heavy_check_mark: IV_setcellon(cellon)          |
+| :heavy_check_mark: set_cell_on()                      |  :heavy_check_mark: IV_setcellon(cellon)          |
+| :heavy_check_mark: set_cell_off()                     |        |
 |                                                       |  :heavy_check_mark: IV_setpotential(value)|
 |                                                       |  :heavy_check_mark: IV_setpotentialWE2(value)|
 |                                                       |  :heavy_check_mark: IV_setcurrent(value)|
