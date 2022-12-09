@@ -1,6 +1,7 @@
 from os import path
 from sys import maxsize, modules
 
+
 def get_ivium_dll_path():
     '''Returns the path to the Ivium driver dll.
     It will be the 32 or 64 bit veresion depending on the version of Windows.'''
