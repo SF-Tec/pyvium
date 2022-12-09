@@ -168,7 +168,6 @@ class Pyvium:
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
-        PyviumVerifiers.verify_cell_is_on()
         Core.IV_setpotential(potential_value)
 
     @staticmethod
