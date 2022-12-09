@@ -1,6 +1,7 @@
 '''This module is a simple wrapper around the "Software development driver DLL" for IviumSoft.'''
 from .core import Core
 from .pyvium_verifiers import PyviumVerifiers
+from .errors import DeviceNotConnectedToIviumSoftError, IviumSoftNotRunningError
 
 
 class Pyvium:
@@ -11,9 +12,7 @@ class Pyvium:
         '''Open the driver to manipulate the Ivium software'''
         if Core.is_driver_open():
             Core.IV_close()
-
         Core.IV_open()
-
         try:
             PyviumVerifiers.verify_iviumsoft_is_running()
         except:
@@ -21,12 +20,15 @@ class Pyvium:
             raise
 
     @staticmethod
+    def close_driver():
+        '''Closes the iviumSoft driver'''
+        PyviumVerifiers.verify_driver_is_open()
+        Core.IV_close()
+    
+    @staticmethod
     def get_max_device_number():
         '''Returns the maximum number of devices that can be managed by IviumSoft'''
-        '''Returns:
-                    crash if the driver is not open
-                    24 rest of cases (no device, device not conected, device connected, device bussy...)
-        '''
+        PyviumVerifiers.verify_driver_is_open()
         return Core.IV_MaxDevices()
     
     @staticmethod
@@ -46,25 +48,39 @@ class Pyvium:
         return result_code, status_labels[str(result_code)]
     
     @staticmethod
-    def get_device_serial_number():
-        '''Returns the serial number of the currently selected device'''
-        '''Returns:
-                    crash if the driver is not open
-                    -1,'' --> no iviumsoft or driver opened with no iviumsoft
-                    0,'' --> not conected CompacStat/OctoStat..., no device (or driver opened with no device?, check with DemoStat)
-                    0,'sn' --> device not conected (at least for DemoStat), not working for CompacStat or OctoStat (at least)
-                    0,'sn' --> conected device (compacstat gives "BXXX" instead of "bXXX" when usb powered, Octostat gives "Oct-1"...)
-        '''
-        result_code, serial_number = Core.IV_readSN()
-
-        return result_code, serial_number
+    def get_active_iviumsoft_instances():
+        '''Returns a list of active(opened) IviumSoft instances'''
+        
+        PyviumVerifiers.verify_driver_is_open()
+        active_instances = []
+        for instance_number in range(1,32):
+            Core.IV_selectdevice(instance_number)
+            if not Core.IV_getdevicestatus() == -1:
+                active_instances.append(instance_number)
+        Core.IV_selectdevice(1)
+        return active_instances
 
     @staticmethod
     def select_iviumsoft_instance(iviumsoft_instance_number: int):
         '''It allows to select one instance of the currently running IviumSoft instances'''
-        result_code = Core.IV_selectdevice(iviumsoft_instance_number)
+        
+        PyviumVerifiers.verify_driver_is_open()
+        active_instances = Pyvium.get_active_iviumsoft_instances()
+        if iviumsoft_instance_number not in active_instances:
+            error_msg = 'No IviumSoft on instance number {}, actual active instances list = {}'
+            raise IviumSoftNotRunningError(error_msg.format(iviumsoft_instance_number,active_instances))
+        Core.IV_selectdevice(iviumsoft_instance_number)
 
-        return result_code
+    @staticmethod
+    def get_device_serial_number():
+        '''Returns the serial number of the currently selected device if available'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.veryfy_device_is_connected_to_computer()
+        _, serial_number = Core.IV_readSN()
+        if serial_number == '':
+            raise DeviceNotConnectedToIviumSoftError('This device needs to be connected to get its serial number')
+        return serial_number
 
     @staticmethod
     def connect_device():
@@ -248,5 +264,4 @@ class Pyvium:
         '''Set the value of the ac frequency in Hz'''
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
-
         Core.IV_setfrequency(ac_frequency)

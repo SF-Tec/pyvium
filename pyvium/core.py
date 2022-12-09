@@ -94,7 +94,7 @@ class Core:
         return Core.__lib.IV_MaxDevices()
 
     @staticmethod
-    def IV_selectdevice(iviumsoft_instance_number: int) -> tuple[int, int]:
+    def IV_selectdevice(iviumsoft_instance_number: int = 1) -> tuple[int, int]:
         '''It allows to select one instance of the currently running IviumSoft instances'''
         instance_number_ptr = ffi.new("long *", iviumsoft_instance_number)
         result_code = Core.__lib.IV_selectdevice(instance_number_ptr)
