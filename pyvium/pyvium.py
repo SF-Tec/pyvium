@@ -32,7 +32,7 @@ class Pyvium:
         return Core.IV_MaxDevices()
 
     @staticmethod
-    def IV_get_device_status() -> tuple[int, str]:
+    def get_device_status() -> tuple[int, str]:
         '''It returns -1 (no IviumSoft), 0 (not connected), 1 (available_idle), 2 (available_busy),
             3 (no device available)'''
         PyviumVerifiers.verify_driver_is_open()
@@ -49,7 +49,7 @@ class Pyvium:
 
     @staticmethod
     def is_iviumsoft_running() -> bool:
-        '''It returns true if, at least, one instance of IviumSoft is running'''
+        '''It returns true if if the selected instance of IviumSoft is running'''
         PyviumVerifiers.verify_driver_is_open()
         return not Core.IV_getdevicestatus() == -1
 
