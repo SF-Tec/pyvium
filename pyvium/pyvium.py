@@ -140,14 +140,16 @@ class Pyvium:
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
-        result_code, cell_status_bits = Core.IV_getcellstatus()
+        _, cell_status_bits = Core.IV_getcellstatus()
         cell_status_labels = []
-        if result_code == 0:
-            labels = ["I_ovl", "", "Anin1_ovl", "E_ovl",
-                      "", "CellOff_button pressed", "Cell on"]
-            for i, label in enumerate(labels, 2):
-                if cell_status_bits & (1 << i) and label:
-                    cell_status_labels.append(label)
+        
+        labels = ["I_ovl", "", "Anin1_ovl", "E_ovl",
+                "", "CellOff_button pressed", "Cell on"]
+        for i, label in enumerate(labels, 2):
+            if cell_status_bits & (1 << i) and label:
+                cell_status_labels.append(label)
+        if len(cell_status_labels) == 0:
+            cell_status_labels = ['Cell off']
         return cell_status_labels
 
     @staticmethod
