@@ -1,6 +1,7 @@
 '''This module is a simple wrapper around the "Software development driver DLL" for IviumSoft.'''
 from .core import Core
 from .pyvium_verifiers import PyviumVerifiers
+from .errors import DeviceNotConnectedToIviumSoftError
 
 
 class Pyvium:
@@ -42,13 +43,13 @@ class Pyvium:
     @staticmethod
     def get_device_serial_number():
         '''Returns the serial number of the currently selected device if available'''
-        # 0,'' --> not conected CompacStat/OctoStat..., no device (or driver opened with no device?, check with DemoStat)
-        # 0,'sn' --> device not conected (at least for DemoStat), not working for CompacStat or OctoStat (at least)
-        # 0,'sn' --> conected device (compacstat gives "BXXX" instead of "bXXX" when usb powered, Octostat gives "Oct-1"...)
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
-        result_code, serial_number = Core.IV_readSN()
-        return result_code, serial_number
+        PyviumVerifiers.veryfy_device_is_connected_to_computer()
+        _, serial_number = Core.IV_readSN()
+        if serial_number == '':
+            raise DeviceNotConnectedToIviumSoftError('This device needs to be connected to get its serial number')
+        return serial_number
 
     @staticmethod
     def connect_device():
