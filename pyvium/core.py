@@ -163,8 +163,8 @@ class Core:
         result_code = Core.__lib.IV_SelectChannel(chanel_number_ptr)
         return result_code
 
-        # Direct functions
-
+    
+    # Direct functions
     @staticmethod
     def IV_getcellstatus() -> tuple[int, int]:
         '''Returns cell status labels
@@ -357,8 +357,7 @@ class Core:
             points_quantity_ptr, interval_rate_ptr, result_ptr)
         return result_code, result_ptr[0]
 
-        # WE32 functions
-
+    # WE32 functions
     @staticmethod
     def IV_we32setchannel(channel_index: int) -> int:
         '''Select active WE32 channel (chan)'''

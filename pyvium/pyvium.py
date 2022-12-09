@@ -33,6 +33,7 @@ class Pyvium:
     def IV_get_device_status() -> tuple[int, str]:
         '''It returns -1 (no IviumSoft), 0 (not connected), 1 (available_idle), 2 (available_busy),
             3 (no device available)'''
+        PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
         status_labels = {
             '-1': 'no IviumSoft',
@@ -68,28 +69,30 @@ class Pyvium:
     @staticmethod
     def connect_device():
         '''It connects the currently selected device'''
-        return Core.IV_connect(1)
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.veryfy_device_is_connected_to_computer()
+        Core.IV_connect(1)
 
     @staticmethod
     def disconnect_device():
         '''It disconnects the currently selected device'''
-        return Core.IV_connect(0)
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.veryfy_device_is_connected_to_computer()
+        Core.IV_connect(0)
 
     @staticmethod
     def get_dll_version():
         '''Returns the version of the IviumSoft dll'''
+        PyviumVerifiers.verify_driver_is_open()
         return Core.IV_VersionDll()
 
     @staticmethod
-    def is_iviumsoft_running():
+    def is_iviumsoft_running() -> bool:
         '''It returns true if, at least, one instance of IviumSoft is running'''
-        return Core.IV_VersionCheck() == 1
-
-    @staticmethod
-    def get_device_status():
-        '''It returns -1 (no IviumSoft), 0 (not connected), 1 (available_idle), 2 (available_busy),
-            3 (no device available)'''
-        return Core.IV_getdevicestatus()
+        PyviumVerifiers.verify_driver_is_open()
+        return not Core.IV_getdevicestatus() == -1
 
     @staticmethod
     def get_data_points_quantity():
