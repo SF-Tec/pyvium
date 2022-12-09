@@ -23,23 +23,23 @@
 |                                                       | :heavy_check_mark: IV_VersionDllFileStr()         |
 | :heavy_check_mark: select_channel(int)                | :heavy_check_mark: IV_SelectChannel(int)          |
 | :heavy_check_mark: get_cell_status()                  |  :heavy_check_mark: IV_getcellstatus()            |
-| :heavy_check_mark: set_connection_mode()              |  :heavy_check_mark: IV_setconnectionmode(value)   |
-| :heavy_check_mark: set_cell_on()                      |  :heavy_check_mark: IV_setcellon(cellon)          |
+| :heavy_check_mark: set_connection_mode(int)           |  :heavy_check_mark: IV_setconnectionmode(int)   |
+| :heavy_check_mark: set_cell_on()                      |  :heavy_check_mark: IV_setcellon(int)          |
 | :heavy_check_mark: set_cell_off()                     |        |
-| :heavy_check_mark: set_potential(float)               |  :heavy_check_mark: IV_setpotential(value)|
-| :heavy_check_mark: set_we2_potential(float)           |  :heavy_check_mark: IV_setpotentialWE2(value)|
-| :heavy_check_mark: set_curretn(float)                 |  :heavy_check_mark: IV_setcurrent(value)|
-| :heavy_check_mark: get_potential()                    |  :heavy_check_mark: IV_getpotential(value)|
-|                                                       |  :heavy_check_mark: IV_setcurrentrange(value)|
-|                                                       |  :heavy_check_mark: IV_setcurrentrangeWE2(value)|
-|                                                       |  :heavy_check_mark: IV_getcurrent(value)|
-|                                                       |  :heavy_check_mark: IV_getcurrentWE2(value)|
-|                                                       |  :heavy_check_mark: IV_setfilter(value)|
-|                                                       |  :heavy_check_mark: IV_setstability(value)|
-|                                                       |  :heavy_check_mark: IV_setbistatmode(value)|
-|                                                       |  :heavy_check_mark: IV_setdac(channr, value)|
-|                                                       |  :heavy_check_mark: IV_getadc(channr, value)|
-|                                                       |  :heavy_check_mark: IV_setmuxchannel(value)|
+| :heavy_check_mark: set_potential(float)               |  :heavy_check_mark: IV_setpotential(float)|
+| :heavy_check_mark: set_we2_potential(float)           |  :heavy_check_mark: IV_setpotentialWE2(float)|
+| :heavy_check_mark: set_curretn(float)                 |  :heavy_check_mark: IV_setcurrent(float)|
+| :heavy_check_mark: get_potential()                    |  :heavy_check_mark: IV_getpotential()|
+| :heavy_check_mark: set_current_range(int)             |  :heavy_check_mark: IV_setcurrentrange(int)|
+| :heavy_check_mark: set_we2_current_range(int)         |  :heavy_check_mark: IV_setcurrentrangeWE2(int)|
+| :heavy_check_mark: get_current()                      |  :heavy_check_mark: IV_getcurrent()|
+| :heavy_check_mark: get_we2_current()                  |  :heavy_check_mark: IV_getcurrentWE2()|
+| :heavy_check_mark: set_filter(int)                    |  :heavy_check_mark: IV_setfilter(int)|
+| :heavy_check_mark: set_stability(int)                 |  :heavy_check_mark: IV_setstability(int)|
+| :heavy_check_mark: set_bistat_mode(int)               |  :heavy_check_mark: IV_setbistatmode(int)|
+| :heavy_check_mark: set_dac(int, float)                |  :heavy_check_mark: IV_setdac(int, float)|
+|                                                       |  :heavy_check_mark: IV_getadc(int, float)|
+|                                                       |  :heavy_check_mark: IV_setmuxchannel(int)|
 |                                                       |  :heavy_check_mark: IV_setdigout(value)|
 |                                                       |  :heavy_check_mark: IV_getdigin(value)|
 |  :heavy_check_mark: set_ac_frequency()                |  :heavy_check_mark: IV_setfrequency(value)|

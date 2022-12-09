@@ -269,6 +269,14 @@ class Pyvium:
         PyviumVerifiers.verify_iviumsoft_is_running()
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()  
         Core.IV_setstability(value)
+
+    @staticmethod
+    def set_dac(channel_number: int, value: float):
+        '''Set dac on external port, int=0 for dac1, int=1 for dac2'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft() 
+        Core.IV_setdac(channel_number, value)
         
     @staticmethod
     def get_data_points_quantity():
