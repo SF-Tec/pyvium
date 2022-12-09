@@ -167,7 +167,7 @@ class Pyvium:
     @staticmethod
     def set_cell_on():
         '''Set cell off '''
-        if 'Cell on' not in Pyvium.get_cell_status():
+        if 'Cell off' in Pyvium.get_cell_status():
             Core.IV_setcellon(1)
 
     @staticmethod
