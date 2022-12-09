@@ -4,7 +4,8 @@ from .errors import DriverNotOpenError, \
     IviumSoftNotRunningError, \
     DeviceNotConnectedToIviumSoftError, \
     DeviceBusyError, \
-    NoDeviceDetectedError
+    NoDeviceDetectedError, \
+    CellOffError
 
 
 class PyviumVerifiers:
@@ -45,3 +46,10 @@ class PyviumVerifiers:
         device_status = Core.IV_getdevicestatus()
         if device_status == 2:
             raise DeviceBusyError
+
+    @staticmethod
+    def verify_cell_is_on():
+        '''Raise exception if the is off'''
+        _, device_status = Core.IV_getcellstatus()
+        if 'Cell on' not in device_status:
+            raise CellOffError

@@ -151,6 +151,15 @@ class Pyvium:
         Core.IV_setconnectionmode(connection_mode_number)
 
     @staticmethod
+    def IV_set_cell_on():
+        '''Set cell on '''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        if 'Cell on' not in Pyvium.get_cell_status():
+            Core.IV_setcellon(1)
+
+    @staticmethod
     def get_data_points_quantity():
         '''Returns actual available number of datapoints: indicates the progress during a run'''
         result_code, data_point = Core.IV_Ndatapoints()
