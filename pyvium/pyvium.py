@@ -224,6 +224,15 @@ class Pyvium:
         PyviumVerifiers.verify_iviumsoft_is_running()
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
         Core.IV_setcurrentrangeWE2(current_range_number)
+
+    @staticmethod
+    def get_current() -> float:
+        '''Returns measured current'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        _, current_value = Core.IV_getcurrent()
+        return current_value
         
     @staticmethod
     def get_data_points_quantity():
