@@ -169,7 +169,7 @@ class Pyvium:
         PyviumVerifiers.verify_iviumsoft_is_running()
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
         PyviumVerifiers.verify_cell_is_on()
-        Core.__lib.IV_setpotential(potential_value)
+        Core.IV_setpotential(potential_value)
 
     @staticmethod
     def get_data_points_quantity():
