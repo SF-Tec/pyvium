@@ -128,8 +128,8 @@ class Pyvium:
     def select_channel(chanel_number: int):
         '''Sending the integer value communicates with Multichannel control:
             if not yet active, the [int] number of tabs is automatically opened and the [int] tab becomes active;
-            if Ivium-n-Soft is active already, the [int] tab becomes active. 
-            Now the channel/instrument that is connected to this tab can be controlled. 
+            if Ivium-n-Soft is active already, the [int] tab becomes active.
+            Now the channel/instrument that is connected to this tab can be controlled.
             If no instrument is connected, the next available instrument in the list can be connected (IV_connect) and controlled.'''
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
@@ -216,6 +216,92 @@ class Pyvium:
         return potential_value
 
     @staticmethod
+    def set_current_range(current_range_number: int):
+        '''Set current range, 0=10A, 1=1A, etc,'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setcurrentrange(current_range_number)
+
+    @staticmethod
+    def set_we2_current_range(current_range_number: int):
+        '''Set current range for BiStat, 0=10mA, 1=1mA, etc,'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setcurrentrangeWE2(current_range_number)
+
+    @staticmethod
+    def get_current() -> float:
+        '''Returns measured current'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        _, current_value = Core.IV_getcurrent()
+        return current_value
+
+    @staticmethod
+    def get_we2_current() -> float:
+        '''Returns measured current from WE2 (bipotentiostat)'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        _, current_value = Core.IV_getcurrentWE2()
+        return current_value
+
+    @staticmethod
+    def set_filter(filter_number: int):
+        '''Set filter, for int :0=1MHz, 1=100kHz, 2=10kHz, 3=1kHz, 4=10Hz'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setfilter(filter_number)
+
+    @staticmethod
+    def set_stability(stability_number: int):
+        '''Set stability, for int 0=HighSpeed, 1=Standard, 2=HighStability'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setstability(stability_number)
+
+    @staticmethod
+    def set_bistat_mode(value: int):
+        '''REVISE! --> IV_bistat_mode(int) in documentation
+            Select mode for BiStat, for int 0=standard, 1=scanning
+            This bistat_mode function also can be used to control the Automatic E-ranging function of the instrument;
+            0=AutoEranging off; 1=AutoEranging on'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setbistatmode(value)
+
+    @staticmethod
+    def set_dac(channel_number: int, value: float):
+        '''Set dac on external port, int=0 for dac1, int=1 for dac2'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setdac(channel_number, value)
+
+    @staticmethod
+    def get_adc(channel_number: int) -> float:
+        '''REVISE! Returns measured voltage on external ADC port, int=channelnr. 0-7'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        _, measured_voltage = Core.IV_getadc(channel_number)
+        return measured_voltage
+
+    @staticmethod
+    def set_mux_channel(channel_number: int = 0):
+        '''Set channel of multiplexer, int=channelnr. starting from 0(default)'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        Core.IV_setmuxchannel(channel_number)
+
+    @staticmethod
     def get_current_trace(points_quantity: int, interval_rate: float):
         '''Returns a sequence of measured currents at defined samplingrate
             (npoints, interval, array of double): npoints<=256, interval: 10us to 20ms'''
@@ -292,6 +378,7 @@ class Pyvium:
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        PyviumVerifiers.verify_device_is_available()
 
         result_code, _ = Core.IV_startmethod(method_file_path)
 
