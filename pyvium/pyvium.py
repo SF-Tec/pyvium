@@ -268,7 +268,7 @@ class Pyvium:
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()  
-        Core.IV_setstability(value)
+        Core.IV_setbistatmode(value)
 
     @staticmethod
     def set_dac(channel_number: int, value: float):
