@@ -271,7 +271,7 @@ class Core:
             This bistat_mode function also can be used to control the Automatic E-ranging function of the instrument;
             0=AutoEranging off; 1=AutoEranging on'''
         value_ptr = ffi.new("long *", value)
-        result_code = Core.__lib.IV_setstability(value_ptr)
+        result_code = Core.__lib.IV_setbistatmode(value_ptr)
         return result_code
 
     @staticmethod
@@ -283,11 +283,11 @@ class Core:
         return result_code
 
     @staticmethod
-    def IV_getadc(channel_number: int) -> tuple[int, int]:
+    def IV_getadc(channel_number: int) -> tuple[int, float]:
         '''REVISE! Returns measured voltage on external ADC port, int=channelnr. 0-7'''
         channel_number_ptr = ffi.new("long *", channel_number)
         measured_voltage_ptr = ffi.new("double *")
-        result_code = Core.__lib.IV_getdac(
+        result_code = Core.__lib.IV_getadc(
             channel_number_ptr, measured_voltage_ptr)
         return result_code, measured_voltage_ptr[0]
 
