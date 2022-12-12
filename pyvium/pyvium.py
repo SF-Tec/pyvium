@@ -255,7 +255,7 @@ class Pyvium:
         '''Set the value of the ac frequency in Hz'''
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
-        
+
         Core.IV_setfrequency(ac_frequency)
 
     ###############################
@@ -268,7 +268,7 @@ class Pyvium:
             method_file_path represents the full path to the file.'''
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
-        
+
         result_code, _ = Core.IV_readmethod(method_file_path)
 
         if result_code == 1:

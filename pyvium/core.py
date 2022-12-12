@@ -166,7 +166,6 @@ class Core:
         result_code = Core.__lib.IV_SelectChannel(chanel_number_ptr)
         return result_code
 
-    
     ###############################
     #### DIRECT MODE FUNCTIONS ####
     ###############################
