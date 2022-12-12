@@ -344,16 +344,22 @@ class Pyvium:
         '''Get the data from a datapoint with index int, returns 3 values that depend on
             the used technique. For example LSV/CV methods return (E/I/0) Transient methods
             return (time/I,E/0), Impedance methods return (Z1,Z2,freq) etc.'''
-        result_code, value1, value2, value3 = Core.IV_getdata(
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+
+        _, value1, value2, value3 = Core.IV_getdata(
             data_point_index)
 
-        return result_code, value1, value2, value3
+        return value1, value2, value3
 
     @staticmethod
     def get_data_point_from_scan(data_point_index: int, scan_index: int):
         '''Same as get_data_point, but with the additional scan_index parameter.
             This function will allow reading data from non-selected (previous) scans.'''
-        result_code, value1, value2, value3 = Core.IV_getdatafromline(
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+
+        _, value1, value2, value3 = Core.IV_getdatafromline(
             data_point_index, scan_index)
 
-        return result_code, value1, value2, value3
+        return value1, value2, value3
