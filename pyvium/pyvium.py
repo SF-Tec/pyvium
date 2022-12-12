@@ -266,6 +266,7 @@ class Pyvium:
             method_file_path represents the full path to the file.'''
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
+        
         result_code, _ = Core.IV_readmethod(method_file_path)
 
         if result_code == 1:
@@ -296,17 +297,6 @@ class Pyvium:
             raise FileNotFoundError
 
     @staticmethod
-    def save_method_data(method_data_file_path: str):
-        '''Saves the results of the last method execution into a file.
-            method_file_path represents the full path to the new file.
-           IMPORTANT: If the path provided is not valid,
-           it will close the selected iviumsoft instance.
-        '''
-        PyviumVerifiers.verify_driver_is_open()
-        PyviumVerifiers.verify_iviumsoft_is_running()
-        Core.IV_savedata(method_data_file_path)
-
-    @staticmethod
     def abort_method():
         '''Aborts the ongoing method procedure'''
         PyviumVerifiers.verify_driver_is_open()
@@ -316,19 +306,36 @@ class Pyvium:
         Core.IV_abort()
 
     @staticmethod
-    def set_method_parameter_value(parameter_name: str, parameter_value: str):
-        '''Allows updating the parameter values for the currently loaded method procedrue.
-            It only works for text based parameters and dropdowns (multiple option selectors).'''
-        result_code = Core.IV_setmethodparameter(
-            parameter_name, parameter_value)
+    def save_method_data(method_data_file_path: str):
+        '''Saves the results of the last method execution into a file.
+            method_file_path represents the full path to the new file.
+           IMPORTANT: If the path provided is not valid,
+           it will close the selected iviumsoft instance.
+        '''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
 
-        return result_code
+        Core.IV_savedata(method_data_file_path)
 
     @staticmethod
-    def get_data_points_quantity():
+    def set_method_parameter(parameter_name: str, parameter_value: str):
+        '''Allows updating the parameter values for the currently loaded method procedrue.
+            It only works for text based parameters and dropdowns (multiple option selectors).'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+
+        Core.IV_setmethodparameter(
+            parameter_name, parameter_value)
+
+    @staticmethod
+    def get_available_data_points_number():
         '''Returns actual available number of datapoints: indicates the progress during a run'''
-        result_code, data_point = Core.IV_Ndatapoints()
-        return result_code, data_point
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+
+        _, available_data_points_number = Core.IV_Ndatapoints()
+
+        return _, available_data_points_number
 
     @staticmethod
     def get_data_point(data_point_index: int):
