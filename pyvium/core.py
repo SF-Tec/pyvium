@@ -271,7 +271,7 @@ class Core:
             This bistat_mode function also can be used to control the Automatic E-ranging function of the instrument;
             0=AutoEranging off; 1=AutoEranging on'''
         value_ptr = ffi.new("long *", value)
-        result_code = Core.__lib.IV_setstability(value_ptr)
+        result_code = Core.__lib.IV_setbistatmode(value_ptr)
         return result_code
 
     @staticmethod
