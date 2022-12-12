@@ -424,7 +424,7 @@ class Core:
         '''Loads method procedure previously saved to a file.
             method_file_path represents the full path to the file.'''
         method_file_path_ptr = ffi.new(
-            "char []", method_file_path.encode(UTF_ENCODING))
+            CHAR_ARRAY, method_file_path.encode(UTF_ENCODING))
         result_code = Core.__lib.IV_readmethod(method_file_path_ptr)
         return result_code, ffi.string(method_file_path_ptr).decode(UTF_ENCODING)
 
@@ -433,7 +433,7 @@ class Core:
         '''Saves currently loaded method procedure to a file.
             method_file_path represents the full path to the new file.'''
         method_file_path_ptr = ffi.new(
-            "char []", method_file_path.encode(UTF_ENCODING))
+            CHAR_ARRAY, method_file_path.encode(UTF_ENCODING))
         result_code = Core.__lib.IV_savemethod(method_file_path_ptr)
         return result_code, ffi.string(method_file_path_ptr).decode(UTF_ENCODING)
 
@@ -444,7 +444,7 @@ class Core:
             If the full path to a previously saved method is provided
             then the procedure is loaded from the file and started.'''
         method_file_path_ptr = ffi.new(
-            "char []", method_file_path.encode(UTF_ENCODING))
+            CHAR_ARRAY, method_file_path.encode(UTF_ENCODING))
         result_code = Core.__lib.IV_startmethod(method_file_path_ptr)
         return result_code, ffi.string(method_file_path_ptr).decode(UTF_ENCODING)
 
@@ -458,7 +458,7 @@ class Core:
         '''Saves the results of the last method execution into a file.
             method_file_path represents the full path to the new file.'''
         method_data_file_path_ptr = ffi.new(
-            "char []", method_data_file_path.encode(UTF_ENCODING))
+            CHAR_ARRAY, method_data_file_path.encode(UTF_ENCODING))
         result_code = Core.__lib.IV_savedata(method_data_file_path_ptr)
         return result_code, ffi.string(method_data_file_path_ptr).decode(UTF_ENCODING)
 
@@ -467,9 +467,9 @@ class Core:
         '''Allows updating the parameter values for the currently loaded method procedrue.
             It only works for text based parameters and dropdowns (multiple option selectors).'''
         parameter_name_ptr = ffi.new(
-            "char []", parameter_name.encode(UTF_ENCODING))
+            CHAR_ARRAY, parameter_name.encode(UTF_ENCODING))
         parameter_value_ptr = ffi.new(
-            "char []", parameter_value.encode(UTF_ENCODING))
+            CHAR_ARRAY, parameter_value.encode(UTF_ENCODING))
         result_code = Core.__lib.IV_setmethodparameter(
             parameter_name_ptr, parameter_value_ptr)
         return result_code
