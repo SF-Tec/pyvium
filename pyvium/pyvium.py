@@ -309,9 +309,11 @@ class Pyvium:
     @staticmethod
     def abort_method():
         '''Aborts the ongoing method procedure'''
-        result_code = Core.IV_abort()
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
 
-        return result_code
+        Core.IV_abort()
 
     @staticmethod
     def set_method_parameter_value(parameter_name: str, parameter_value: str):
