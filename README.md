@@ -31,19 +31,20 @@ Core.IV_getdevicestatus()
 Core.IV_close()
 ```
 
-<!-- ## Usage Example (Using Pyvium methods)
+## Usage Example (Using Pyvium methods)
 
 This is a wrapper around the Core functions that adds a few things:
-- Exception management
+- Exception management 
 - New functionalities
 
 ```
 from pyvium import Pyvium
 
-app = Pyvium()
+Pyvium.open_driver()
+Pyvium.get_device_status()
+Pyvium.close_driver()
 
-app.connect_device()
-``` -->
+```
 
 
 ## Supported functions
