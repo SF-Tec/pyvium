@@ -71,7 +71,10 @@ class Core:
     __is_driver_open = False
     __lib = ffi.dlopen(IVIUM_DLL_PATH)
 
-    # Generic functions
+    ###########################
+    #### GENERIC FUNCTIONS ####
+    ###########################
+
     @staticmethod
     def IV_open() -> int:
         '''Open the driver to manipulate the Ivium software'''
@@ -163,8 +166,10 @@ class Core:
         result_code = Core.__lib.IV_SelectChannel(chanel_number_ptr)
         return result_code
 
-    
-    # Direct functions
+    ###############################
+    #### DIRECT MODE FUNCTIONS ####
+    ###############################
+
     @staticmethod
     def IV_getcellstatus() -> tuple[int, int]:
         '''Returns cell status labels
@@ -357,7 +362,10 @@ class Core:
             points_quantity_ptr, interval_rate_ptr, result_ptr)
         return result_code, result_ptr[0]
 
-    # WE32 functions
+    ########################
+    #### WE32 FUNCTIONS ####
+    ########################
+
     @staticmethod
     def IV_we32setchannel(channel_index: int) -> int:
         '''Select active WE32 channel (chan)'''
@@ -402,7 +410,9 @@ class Core:
         result_code = Core.__lib.IV_we32readcurrents(current_values_ptr)
         return result_code, current_values_ptr[0]
 
-        # Method functions
+    ###############################
+    #### METHOD MODE FUNCTIONS ####
+    ###############################
 
     @staticmethod
     def IV_readmethod(method_file_path: str) -> tuple[int, str]:

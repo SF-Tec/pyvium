@@ -7,6 +7,10 @@ from .errors import DeviceNotConnectedToIviumSoftError, IviumSoftNotRunningError
 class Pyvium:
     '''Represents an execution of the Pyvium module'''
 
+    ###########################
+    #### GENERIC FUNCTIONS ####
+    ###########################
+
     @staticmethod
     def open_driver():
         '''Open the driver to manipulate the Ivium software'''
@@ -124,14 +128,16 @@ class Pyvium:
     def select_channel(chanel_number: int):
         '''Sending the integer value communicates with Multichannel control:
             if not yet active, the [int] number of tabs is automatically opened and the [int] tab becomes active;
-            if Ivium-n-Soft is active already, the [int] tab becomes active. 
-            Now the channel/instrument that is connected to this tab can be controlled. 
+            if Ivium-n-Soft is active already, the [int] tab becomes active.
+            Now the channel/instrument that is connected to this tab can be controlled.
             If no instrument is connected, the next available instrument in the list can be connected (IV_connect) and controlled.'''
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
         Core.IV_SelectChannel(chanel_number)
 
-    # Direct functions
+    ###############################
+    #### DIRECT MODE FUNCTIONS ####
+    ###############################
 
     @staticmethod
     def get_cell_status() -> list:
@@ -142,9 +148,9 @@ class Pyvium:
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
         _, cell_status_bits = Core.IV_getcellstatus()
         cell_status_labels = []
-        
+
         labels = ["I_ovl", "", "Anin1_ovl", "E_ovl",
-                "", "CellOff_button pressed", "Cell on"]
+                  "", "CellOff_button pressed", "Cell on"]
         for i, label in enumerate(labels, 2):
             if cell_status_bits & (1 << i) and label:
                 cell_status_labels.append(label)
@@ -242,7 +248,7 @@ class Pyvium:
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
         _, current_value = Core.IV_getcurrentWE2()
         return current_value
-    
+
     @staticmethod
     def set_filter(filter_number: int):
         '''Set filter, for int :0=1MHz, 1=100kHz, 2=10kHz, 3=1kHz, 4=10Hz'''
@@ -267,7 +273,7 @@ class Pyvium:
             0=AutoEranging off; 1=AutoEranging on'''
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
-        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()  
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
         Core.IV_setbistatmode(value)
 
     @staticmethod
@@ -275,9 +281,9 @@ class Pyvium:
         '''Set dac on external port, int=0 for dac1, int=1 for dac2'''
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
-        PyviumVerifiers.verify_device_is_connected_to_iviumsoft() 
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
         Core.IV_setdac(channel_number, value)
-    
+
     @staticmethod
     def get_adc(channel_number: int) -> float:
         '''REVISE! Returns measured voltage on external ADC port, int=channelnr. 0-7'''
@@ -286,7 +292,7 @@ class Pyvium:
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
         _, measured_voltage = Core.IV_getadc(channel_number)
         return measured_voltage
-    
+
     @staticmethod
     def set_mux_channel(channel_number: int = 0):
         '''Set channel of multiplexer, int=channelnr. starting from 0(default)'''
@@ -294,81 +300,6 @@ class Pyvium:
         PyviumVerifiers.verify_iviumsoft_is_running()
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
         Core.IV_setmuxchannel(channel_number)
-
-    @staticmethod
-    def get_data_points_quantity():
-        '''Returns actual available number of datapoints: indicates the progress during a run'''
-        result_code, data_point = Core.IV_Ndatapoints()
-        return result_code, data_point
-
-    @staticmethod
-    def get_data_point(data_point_index: int):
-        '''Get the data from a datapoint with index int, returns 3 values that depend on
-            the used technique. For example LSV/CV methods return (E/I/0) Transient methods
-            return (time/I,E/0), Impedance methods return (Z1,Z2,freq) etc.'''
-        result_code, value1, value2, value3 = Core.IV_getdata(
-            data_point_index)
-
-        return result_code, value1, value2, value3
-
-    @staticmethod
-    def get_data_point_from_scan(data_point_index: int, scan_index: int):
-        '''Same as get_data_point, but with the additional scan_index parameter.
-            This function will allow reading data from non-selected (previous) scans.'''
-        result_code, value1, value2, value3 = Core.IV_getdatafromline(
-            data_point_index, scan_index)
-
-        return result_code, value1, value2, value3
-
-    @staticmethod
-    def load_method(method_file_path: str):
-        '''Loads method procedure previously saved to a file.
-            method_file_path represents the full path to the file.'''
-        result_code, path = Core.IV_readmethod(method_file_path)
-
-        return result_code, path
-
-    @staticmethod
-    def save_method(method_file_path: str):
-        '''Saves currently loaded method procedure to a file.
-            method_file_path represents the full path to the new file.'''
-        result_code, path = Core.IV_savemethod(method_file_path)
-
-        return result_code, path
-
-    @staticmethod
-    def start_method(method_file_path=''):
-        '''Starts a method procedure.
-            If method_file_path is an empty string then the presently loaded procedure is started.
-            If the full path to a previously saved method is provided
-            then the procedure is loaded from the file and started.'''
-        result_code, path = Core.IV_startmethod(method_file_path)
-
-        return result_code, path
-
-    @staticmethod
-    def save_method_data(method_data_file_path: str):
-        '''Saves the results of the last method execution into a file.
-            method_file_path represents the full path to the new file.'''
-        result_code, path = Core.IV_savedata(method_data_file_path)
-
-        return result_code, path
-
-    @staticmethod
-    def abort_method():
-        '''Aborts the ongoing method procedure'''
-        result_code = Core.IV_abort()
-
-        return result_code
-
-    @staticmethod
-    def set_method_parameter_value(parameter_name: str, parameter_value: str):
-        '''Allows updating the parameter values for the currently loaded method procedrue.
-            It only works for text based parameters and dropdowns (multiple option selectors).'''
-        result_code = Core.IV_setmethodparameter(
-            parameter_name, parameter_value)
-
-        return result_code
 
     @staticmethod
     def get_current_trace(points_quantity: int, interval_rate: float):
@@ -402,6 +333,7 @@ class Pyvium:
         '''Set the value of the ac amplitude in Volts'''
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
+
         Core.IV_setamplitude(ac_amplitude)
 
     @staticmethod
@@ -409,4 +341,112 @@ class Pyvium:
         '''Set the value of the ac frequency in Hz'''
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
+
         Core.IV_setfrequency(ac_frequency)
+
+    ###############################
+    #### METHOD MODE FUNCTIONS ####
+    ###############################
+
+    @staticmethod
+    def load_method(method_file_path: str):
+        '''Loads method procedure previously saved to a file.
+            method_file_path represents the full path to the file.'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+
+        result_code, _ = Core.IV_readmethod(method_file_path)
+
+        if result_code == 1:
+            raise FileNotFoundError
+
+    @staticmethod
+    def save_method(method_file_path: str):
+        '''Saves currently loaded method procedure to a file.
+            method_file_path represents the full path to the new file.'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+
+        Core.IV_savemethod(method_file_path)
+
+    @staticmethod
+    def start_method(method_file_path=''):
+        '''Starts a method procedure.
+            If method_file_path is an empty string then the presently loaded procedure is started.
+            If the full path to a previously saved method is provided
+            then the procedure is loaded from the file and started.'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+        PyviumVerifiers.verify_device_is_available()
+
+        result_code, _ = Core.IV_startmethod(method_file_path)
+
+        if result_code == 1:
+            raise FileNotFoundError
+
+    @staticmethod
+    def abort_method():
+        '''Aborts the ongoing method procedure'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
+
+        Core.IV_abort()
+
+    @staticmethod
+    def save_method_data(method_data_file_path: str):
+        '''Saves the results of the last method execution into a file.
+            method_file_path represents the full path to the new file.
+           IMPORTANT: If the path provided is not valid,
+           it will close the selected iviumsoft instance.
+        '''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+
+        Core.IV_savedata(method_data_file_path)
+
+    @staticmethod
+    def set_method_parameter(parameter_name: str, parameter_value: str):
+        '''Allows updating the parameter values for the currently loaded method procedrue.
+            It only works for text based parameters and dropdowns (multiple option selectors).'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+
+        Core.IV_setmethodparameter(
+            parameter_name, parameter_value)
+
+    @staticmethod
+    def get_available_data_points_number():
+        '''Returns actual available number of datapoints: indicates the progress during a run'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+
+        _, available_data_points_number = Core.IV_Ndatapoints()
+
+        return available_data_points_number
+
+    @staticmethod
+    def get_data_point(data_point_index: int):
+        '''Get the data from a datapoint with index int, returns 3 values that depend on
+            the used technique. For example LSV/CV methods return (E/I/0) Transient methods
+            return (time/I,E/0), Impedance methods return (Z1,Z2,freq) etc.'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+
+        _, value1, value2, value3 = Core.IV_getdata(
+            data_point_index)
+
+        return value1, value2, value3
+
+    @staticmethod
+    def get_data_point_from_scan(data_point_index: int, scan_index: int):
+        '''Same as get_data_point, but with the additional scan_index parameter.
+            This function will allow reading data from non-selected (previous) scans.'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+
+        _, value1, value2, value3 = Core.IV_getdatafromline(
+            data_point_index, scan_index)
+
+        return value1, value2, value3

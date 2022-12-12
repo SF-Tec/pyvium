@@ -46,10 +46,9 @@ app.connect_device()
 ``` -->
 
 
-## Not working functions
-- IV_getcurrentWE2trace
-- IV_getpotentialtrace
+## Supported functions
 
+The list of currently supported and implemented functions can be found [here](./docs/method_list.md).
 ## Links
 
 * [See on GitHub](https://github.com/sftec/pyvium)
