@@ -23,7 +23,7 @@
 |                                                       | :heavy_check_mark: IV_VersionDllFileStr()         |
 | :heavy_check_mark: select_channel(int)                | :heavy_check_mark: IV_SelectChannel(int)          |
 | :heavy_check_mark: get_cell_status()                  |  :heavy_check_mark: IV_getcellstatus()            |
-| :heavy_check_mark: set_connection_mode()              |  :heavy_check_mark: IV_setconnectionmode(value)   |
+| :heavy_check_mark: set_connection_mode(int)              |  :heavy_check_mark: IV_setconnectionmode(value)   |
 | :heavy_check_mark: set_cell_on()                      |  :heavy_check_mark: IV_setcellon(cellon)          |
 | :heavy_check_mark: set_cell_off()                     |        |
 | :heavy_check_mark: set_potential(float)               |  :heavy_check_mark: IV_setpotential(value)|
@@ -42,8 +42,8 @@
 |                                                       |  :heavy_check_mark: IV_setmuxchannel(value)|
 |                                                       |  :heavy_check_mark: IV_setdigout(value)|
 |                                                       |  :heavy_check_mark: IV_getdigin(value)|
-|  :heavy_check_mark: set_ac_frequency()                |  :heavy_check_mark: IV_setfrequency(value)|
-|  :heavy_check_mark: set_ac_amplitude()                |  :heavy_check_mark: IV_setamplitude(value)|
+|  :heavy_check_mark: set_ac_frequency(float)                |  :heavy_check_mark: IV_setfrequency(value)|
+|  :heavy_check_mark: set_ac_amplitude(float)                |  :heavy_check_mark: IV_setamplitude(value)|
 |                                                       |  :heavy_check_mark: IV_getcurrenttrace(npoints, rate, values)|
 |                                                       |  :heavy_check_mark: IV_getcurrentWE2trace(npoints, rate, values)|
 |      |  :heavy_check_mark: IV_getpotentialtrace(npoints, rate, values)|
@@ -52,13 +52,13 @@
 |      |  :heavy_check_mark: IV_we32setoffsets(nval, values)|
 |      |  :heavy_check_mark: IV_we32getoffsets(nval, values)|
 |      |  :heavy_check_mark: IV_we32readcurrents(values)|
-| :heavy_check_mark: load_method(method_file_path: str) |  :heavy_check_mark: IV_readmethod(fname)|
-| :heavy_check_mark: save_method(method_file_path: str) |  :heavy_check_mark: IV_savemethod(fname)|
-| :heavy_check_mark: start_method(method_file_path: str) |  :heavy_check_mark: IV_startmethod(fname)|
+| :heavy_check_mark: load_method(str) |  :heavy_check_mark: IV_readmethod(fname)|
+| :heavy_check_mark: save_method(str) |  :heavy_check_mark: IV_savemethod(fname)|
+| :heavy_check_mark: start_method(str) |  :heavy_check_mark: IV_startmethod(fname)|
 | :heavy_check_mark: abort_method() |  :heavy_check_mark: IV_abort()|
-| :heavy_check_mark: save_method_data(method_data_file_path: str) |  :heavy_check_mark: IV_savedata(fname)|
-| :heavy_check_mark: set_method_parameterparameter_name: str, parameter_value: str) |  :heavy_check_mark: IV_setmethodparameter(parname, parvalue)|
+| :heavy_check_mark: save_method_data(str) |  :heavy_check_mark: IV_savedata(fname)|
+| :heavy_check_mark: set_method_parameter(str, str) |  :heavy_check_mark: IV_setmethodparameter(parname, parvalue)|
 | :heavy_check_mark: get_available_data_points_number() |  :heavy_check_mark: IV_Ndatapoints(value)|
-|  |  :heavy_check_mark: IV_getdata(pointnr, x, y, z)|
-|  |  :heavy_check_mark: IV_getdatafromline(pointnr, scannr, x, y, z)|
+| :heavy_check_mark: get_data_point(int) |  :heavy_check_mark: IV_getdata(pointnr, x, y, z)|
+| :heavy_check_mark: get_data_point_from_scan(int, int) |  :heavy_check_mark: IV_getdatafromline(pointnr, scannr, x, y, z)|
 |  |  :small_orange_diamond: IV_getDbFileName(fname)|
