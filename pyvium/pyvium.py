@@ -278,8 +278,7 @@ class Pyvium:
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
 
-        result_code, _ = Core.IV_savemethod(method_file_path)
-        return result_code
+        Core.IV_savemethod(method_file_path)
 
     @staticmethod
     def start_method(method_file_path=''):
@@ -287,9 +286,14 @@ class Pyvium:
             If method_file_path is an empty string then the presently loaded procedure is started.
             If the full path to a previously saved method is provided
             then the procedure is loaded from the file and started.'''
-        result_code, path = Core.IV_startmethod(method_file_path)
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
 
-        return result_code, path
+        result_code, _ = Core.IV_startmethod(method_file_path)
+
+        if result_code == 1:
+            raise FileNotFoundError
 
     @staticmethod
     def save_method_data(method_data_file_path: str):
