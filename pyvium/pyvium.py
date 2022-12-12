@@ -298,10 +298,13 @@ class Pyvium:
     @staticmethod
     def save_method_data(method_data_file_path: str):
         '''Saves the results of the last method execution into a file.
-            method_file_path represents the full path to the new file.'''
-        result_code, path = Core.IV_savedata(method_data_file_path)
-
-        return result_code, path
+            method_file_path represents the full path to the new file.
+           IMPORTANT: If the path provided is not valid,
+           it will close the selected iviumsoft instance.
+        '''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        Core.IV_savedata(method_data_file_path)
 
     @staticmethod
     def abort_method():
