@@ -7,6 +7,10 @@ from .errors import DeviceNotConnectedToIviumSoftError, IviumSoftNotRunningError
 class Pyvium:
     '''Represents an execution of the Pyvium module'''
 
+    ###########################
+    #### GENERIC FUNCTIONS ####
+    ###########################
+
     @staticmethod
     def open_driver():
         '''Open the driver to manipulate the Ivium software'''
@@ -131,7 +135,9 @@ class Pyvium:
         PyviumVerifiers.verify_iviumsoft_is_running()
         Core.IV_SelectChannel(chanel_number)
 
-    # Direct functions
+    ###############################
+    #### DIRECT MODE FUNCTIONS ####
+    ###############################
 
     @staticmethod
     def get_cell_status() -> list:
@@ -142,9 +148,9 @@ class Pyvium:
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
         _, cell_status_bits = Core.IV_getcellstatus()
         cell_status_labels = []
-        
+
         labels = ["I_ovl", "", "Anin1_ovl", "E_ovl",
-                "", "CellOff_button pressed", "Cell on"]
+                  "", "CellOff_button pressed", "Cell on"]
         for i, label in enumerate(labels, 2):
             if cell_status_bits & (1 << i) and label:
                 cell_status_labels.append(label)
@@ -210,81 +216,6 @@ class Pyvium:
         return potential_value
 
     @staticmethod
-    def get_data_points_quantity():
-        '''Returns actual available number of datapoints: indicates the progress during a run'''
-        result_code, data_point = Core.IV_Ndatapoints()
-        return result_code, data_point
-
-    @staticmethod
-    def get_data_point(data_point_index: int):
-        '''Get the data from a datapoint with index int, returns 3 values that depend on
-            the used technique. For example LSV/CV methods return (E/I/0) Transient methods
-            return (time/I,E/0), Impedance methods return (Z1,Z2,freq) etc.'''
-        result_code, value1, value2, value3 = Core.IV_getdata(
-            data_point_index)
-
-        return result_code, value1, value2, value3
-
-    @staticmethod
-    def get_data_point_from_scan(data_point_index: int, scan_index: int):
-        '''Same as get_data_point, but with the additional scan_index parameter.
-            This function will allow reading data from non-selected (previous) scans.'''
-        result_code, value1, value2, value3 = Core.IV_getdatafromline(
-            data_point_index, scan_index)
-
-        return result_code, value1, value2, value3
-
-    @staticmethod
-    def load_method(method_file_path: str):
-        '''Loads method procedure previously saved to a file.
-            method_file_path represents the full path to the file.'''
-        result_code, path = Core.IV_readmethod(method_file_path)
-
-        return result_code, path
-
-    @staticmethod
-    def save_method(method_file_path: str):
-        '''Saves currently loaded method procedure to a file.
-            method_file_path represents the full path to the new file.'''
-        result_code, path = Core.IV_savemethod(method_file_path)
-
-        return result_code, path
-
-    @staticmethod
-    def start_method(method_file_path=''):
-        '''Starts a method procedure.
-            If method_file_path is an empty string then the presently loaded procedure is started.
-            If the full path to a previously saved method is provided
-            then the procedure is loaded from the file and started.'''
-        result_code, path = Core.IV_startmethod(method_file_path)
-
-        return result_code, path
-
-    @staticmethod
-    def save_method_data(method_data_file_path: str):
-        '''Saves the results of the last method execution into a file.
-            method_file_path represents the full path to the new file.'''
-        result_code, path = Core.IV_savedata(method_data_file_path)
-
-        return result_code, path
-
-    @staticmethod
-    def abort_method():
-        '''Aborts the ongoing method procedure'''
-        result_code = Core.IV_abort()
-
-        return result_code
-
-    @staticmethod
-    def set_method_parameter_value(parameter_name: str, parameter_value: str):
-        '''Allows updating the parameter values for the currently loaded method procedrue.
-            It only works for text based parameters and dropdowns (multiple option selectors).'''
-        result_code = Core.IV_setmethodparameter(
-            parameter_name, parameter_value)
-
-        return result_code
-
-    @staticmethod
     def get_current_trace(points_quantity: int, interval_rate: float):
         '''Returns a sequence of measured currents at defined samplingrate
             (npoints, interval, array of double): npoints<=256, interval: 10us to 20ms'''
@@ -324,3 +255,87 @@ class Pyvium:
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
         Core.IV_setfrequency(ac_frequency)
+
+    ###############################
+    #### METHOD MODE FUNCTIONS ####
+    ###############################
+
+    @staticmethod
+    def load_method(method_file_path: str):
+        '''Loads method procedure previously saved to a file.
+            method_file_path represents the full path to the file.'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+        result_code, _ = Core.IV_readmethod(method_file_path)
+
+        if result_code == 1:
+            raise FileNotFoundError
+
+    @staticmethod
+    def save_method(method_file_path: str):
+        '''Saves currently loaded method procedure to a file.
+            method_file_path represents the full path to the new file.'''
+        PyviumVerifiers.verify_driver_is_open()
+        PyviumVerifiers.verify_iviumsoft_is_running()
+
+        result_code, _ = Core.IV_savemethod(method_file_path)
+        return result_code
+
+    @staticmethod
+    def start_method(method_file_path=''):
+        '''Starts a method procedure.
+            If method_file_path is an empty string then the presently loaded procedure is started.
+            If the full path to a previously saved method is provided
+            then the procedure is loaded from the file and started.'''
+        result_code, path = Core.IV_startmethod(method_file_path)
+
+        return result_code, path
+
+    @staticmethod
+    def save_method_data(method_data_file_path: str):
+        '''Saves the results of the last method execution into a file.
+            method_file_path represents the full path to the new file.'''
+        result_code, path = Core.IV_savedata(method_data_file_path)
+
+        return result_code, path
+
+    @staticmethod
+    def abort_method():
+        '''Aborts the ongoing method procedure'''
+        result_code = Core.IV_abort()
+
+        return result_code
+
+    @staticmethod
+    def set_method_parameter_value(parameter_name: str, parameter_value: str):
+        '''Allows updating the parameter values for the currently loaded method procedrue.
+            It only works for text based parameters and dropdowns (multiple option selectors).'''
+        result_code = Core.IV_setmethodparameter(
+            parameter_name, parameter_value)
+
+        return result_code
+
+    @staticmethod
+    def get_data_points_quantity():
+        '''Returns actual available number of datapoints: indicates the progress during a run'''
+        result_code, data_point = Core.IV_Ndatapoints()
+        return result_code, data_point
+
+    @staticmethod
+    def get_data_point(data_point_index: int):
+        '''Get the data from a datapoint with index int, returns 3 values that depend on
+            the used technique. For example LSV/CV methods return (E/I/0) Transient methods
+            return (time/I,E/0), Impedance methods return (Z1,Z2,freq) etc.'''
+        result_code, value1, value2, value3 = Core.IV_getdata(
+            data_point_index)
+
+        return result_code, value1, value2, value3
+
+    @staticmethod
+    def get_data_point_from_scan(data_point_index: int, scan_index: int):
+        '''Same as get_data_point, but with the additional scan_index parameter.
+            This function will allow reading data from non-selected (previous) scans.'''
+        result_code, value1, value2, value3 = Core.IV_getdatafromline(
+            data_point_index, scan_index)
+
+        return result_code, value1, value2, value3
