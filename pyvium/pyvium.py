@@ -247,6 +247,7 @@ class Pyvium:
         '''Set the value of the ac amplitude in Volts'''
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
+
         Core.IV_setamplitude(ac_amplitude)
 
     @staticmethod
@@ -254,6 +255,7 @@ class Pyvium:
         '''Set the value of the ac frequency in Hz'''
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
+        
         Core.IV_setfrequency(ac_frequency)
 
     ###############################
@@ -335,7 +337,7 @@ class Pyvium:
 
         _, available_data_points_number = Core.IV_Ndatapoints()
 
-        return _, available_data_points_number
+        return available_data_points_number
 
     @staticmethod
     def get_data_point(data_point_index: int):
