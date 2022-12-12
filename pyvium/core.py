@@ -65,6 +65,11 @@ ffi.cdef("""
 
 IVIUM_DLL_PATH = get_ivium_dll_path()
 
+CHAR_ARRAY = "char[]"
+DOUBLE_PTR = "long *"
+LONG_PTR = "long *"
+UTF_ENCODING = "utf-8"
+
 
 class Core:
     '''Represents an execution of the Pyvium module'''
@@ -99,7 +104,7 @@ class Core:
     @staticmethod
     def IV_selectdevice(iviumsoft_instance_number: int = 1) -> tuple[int, int]:
         '''It allows to select one instance of the currently running IviumSoft instances'''
-        instance_number_ptr = ffi.new("long *", iviumsoft_instance_number)
+        instance_number_ptr = ffi.new(LONG_PTR, iviumsoft_instance_number)
         result_code = Core.__lib.IV_selectdevice(instance_number_ptr)
         return result_code, instance_number_ptr[0]
 
@@ -112,21 +117,21 @@ class Core:
     @staticmethod
     def IV_readSN() -> tuple[int, str]:
         '''Returns the serial number of the currently selected device'''
-        device_serial_number_ptr = ffi.new("char[]", 16)
+        device_serial_number_ptr = ffi.new(CHAR_ARRAY, 16)
         result_code = Core.__lib.IV_readSN(device_serial_number_ptr)
-        return result_code, ffi.string(device_serial_number_ptr).decode("utf-8")
+        return result_code, ffi.string(device_serial_number_ptr).decode(UTF_ENCODING)
 
     @staticmethod
     def IV_connect(connection_status: int) -> tuple[int, int]:
         '''It connects the currently selected device'''
-        connection_status_ptr = ffi.new("long *", connection_status)
+        connection_status_ptr = ffi.new(LONG_PTR, connection_status)
         result_code = Core.__lib.IV_connect(connection_status_ptr)
         return result_code, connection_status_ptr[0]
 
     @staticmethod
     def IV_VersionHost(version_host: int) -> tuple[int, int]:
         '''REVISE!!! Returns the version Host'''
-        version_host_ptr = ffi.new("long *", version_host)
+        version_host_ptr = ffi.new(LONG_PTR, version_host)
         result_code = Core.__lib.IV_VersionHost(version_host_ptr)
         return result_code, version_host_ptr[0]
 
@@ -162,7 +167,7 @@ class Core:
             if Ivium-n-Soft is active already, the [int] tab becomes active. 
             Now the channel/instrument that is connected to this tab can be controlled. 
             If no instrument is connected, the next available instrument in the list can be connected (IV_connect) and controlled.'''
-        chanel_number_ptr = ffi.new("long *", chanel_number)
+        chanel_number_ptr = ffi.new(LONG_PTR, chanel_number)
         result_code = Core.__lib.IV_SelectChannel(chanel_number_ptr)
         return result_code
 
@@ -174,7 +179,7 @@ class Core:
     def IV_getcellstatus() -> tuple[int, int]:
         '''Returns cell status labels
             ["I_ovl", "Anin1_ovl","E_ovl", "CellOff_button pressed", "Cell on"]'''
-        cell_status_ptr = ffi.new("long *")
+        cell_status_ptr = ffi.new(LONG_PTR)
         result_code = Core.__lib.IV_getcellstatus(cell_status_ptr)
         return result_code, cell_status_ptr[0]
 
@@ -185,7 +190,7 @@ class Core:
             These are all the supported connection modes: 0=off; 1=EStat4EL(default), 2=EStat2EL,
             3=EstatDummy1,4=EStatDummy2,5=EstatDummy3,6=EstatDummy4
             7=Istat4EL, 8=Istat2EL, 9=IstatDummy, 10=BiStat4EL, 11=BiStat2EL'''
-        connection_mode_number_ptr = ffi.new("long *", connection_mode_number)
+        connection_mode_number_ptr = ffi.new(LONG_PTR, connection_mode_number)
         result_code = Core.__lib.IV_setconnectionmode(
             connection_mode_number_ptr)
         return result_code
@@ -193,7 +198,7 @@ class Core:
     @staticmethod
     def IV_setcellon(cell_on_mode_number: int) -> int:
         '''Set cell on off to close cell relais (0=off;1=on)'''
-        cell_on_mode_number_ptr = ffi.new("long *", cell_on_mode_number)
+        cell_on_mode_number_ptr = ffi.new(LONG_PTR, cell_on_mode_number)
         result_code = Core.__lib.IV_setcellon(
             cell_on_mode_number_ptr)
         return result_code
@@ -201,42 +206,42 @@ class Core:
     @staticmethod
     def IV_setpotential(potential_value: float) -> int:
         '''Set cell potential'''
-        potential_value_ptr = ffi.new("double *", potential_value)
+        potential_value_ptr = ffi.new(DOUBLE_PTR, potential_value)
         result_code = Core.__lib.IV_setpotential(potential_value_ptr)
         return result_code
 
     @staticmethod
     def IV_setpotentialWE2(potential_we2_value: float) -> int:
         '''Set BiStat offset potential'''
-        potential_we2_value_ptr = ffi.new("double *", potential_we2_value)
+        potential_we2_value_ptr = ffi.new(DOUBLE_PTR, potential_we2_value)
         result_code = Core.__lib.IV_setpotentialWE2(potential_we2_value_ptr)
         return result_code
 
     @staticmethod
     def IV_setcurrent(current_value: float) -> int:
         '''Set cell current (galvanostatic mode)'''
-        current_value_ptr = ffi.new("double *", current_value)
+        current_value_ptr = ffi.new(DOUBLE_PTR, current_value)
         result_code = Core.__lib.IV_setpotentialWE2(current_value_ptr)
         return result_code
 
     @staticmethod
     def IV_getpotential() -> tuple[int, float]:
         '''Returns measured potential'''
-        potential_value_ptr = ffi.new("double *")
+        potential_value_ptr = ffi.new(DOUBLE_PTR)
         result_code = Core.__lib.IV_getpotential(potential_value_ptr)
         return result_code, potential_value_ptr[0]
 
     @staticmethod
     def IV_setcurrentrange(current_range_number: int) -> int:
         '''Set current range, 0=10A, 1=1A, etc,'''
-        current_range_number_ptr = ffi.new("long *", current_range_number)
+        current_range_number_ptr = ffi.new(LONG_PTR, current_range_number)
         result_code = Core.__lib.IV_setcurrentrange(current_range_number_ptr)
         return result_code
 
     @staticmethod
     def IV_setcurrentrangeWE2(current_range_number: int) -> int:
         '''Set current range for BiStat, 0=10mA, 1=1mA, etc,'''
-        current_range_number_ptr = ffi.new("long *", current_range_number)
+        current_range_number_ptr = ffi.new(LONG_PTR, current_range_number)
         result_code = Core.__lib.IV_setcurrentrangeWE2(
             current_range_number_ptr)
         return result_code
@@ -244,28 +249,28 @@ class Core:
     @staticmethod
     def IV_getcurrent() -> tuple[int, float]:
         '''Returns measured current'''
-        current_value_ptr = ffi.new("double *")
+        current_value_ptr = ffi.new(DOUBLE_PTR)
         result_code = Core.__lib.IV_getcurrent(current_value_ptr)
         return result_code, current_value_ptr[0]
 
     @staticmethod
     def IV_getcurrentWE2() -> tuple[int, float]:
         '''Returns measured current from WE2 (bipotentiostat)'''
-        current_value_ptr = ffi.new("double *")
+        current_value_ptr = ffi.new(DOUBLE_PTR)
         result_code = Core.__lib.IV_getcurrentWE2(current_value_ptr)
         return result_code, current_value_ptr[0]
 
     @staticmethod
     def IV_setfilter(filter_number: int) -> int:
         '''Set filter, for int :0=1MHz, 1=100kHz, 2=10kHz, 3=1kHz, 4=10Hz'''
-        filter_number_ptr = ffi.new("long *", filter_number)
+        filter_number_ptr = ffi.new(LONG_PTR, filter_number)
         result_code = Core.__lib.IV_setfilter(filter_number_ptr)
         return result_code
 
     @staticmethod
     def IV_setstability(stability_number: int) -> int:
         '''Set stability, for int 0=HighSpeed, 1=Standard, 2=HighStability'''
-        stability_number_ptr = ffi.new("long *", stability_number)
+        stability_number_ptr = ffi.new(LONG_PTR, stability_number)
         result_code = Core.__lib.IV_setstability(stability_number_ptr)
         return result_code
 
@@ -275,23 +280,23 @@ class Core:
             Select mode for BiStat, for int 0=standard, 1=scanning
             This bistat_mode function also can be used to control the Automatic E-ranging function of the instrument;
             0=AutoEranging off; 1=AutoEranging on'''
-        value_ptr = ffi.new("long *", value)
+        value_ptr = ffi.new(LONG_PTR, value)
         result_code = Core.__lib.IV_setbistatmode(value_ptr)
         return result_code
 
     @staticmethod
     def IV_setdac(channel_number: int, value: float) -> int:
         '''Set dac on external port, int=0 for dac1, int=1 for dac2'''
-        channel_number_ptr = ffi.new("long *", channel_number)
-        value_ptr = ffi.new("double *", value)
+        channel_number_ptr = ffi.new(LONG_PTR, channel_number)
+        value_ptr = ffi.new(DOUBLE_PTR, value)
         result_code = Core.__lib.IV_setdac(channel_number_ptr, value_ptr)
         return result_code
 
     @staticmethod
     def IV_getadc(channel_number: int) -> tuple[int, float]:
         '''REVISE! Returns measured voltage on external ADC port, int=channelnr. 0-7'''
-        channel_number_ptr = ffi.new("long *", channel_number)
-        measured_voltage_ptr = ffi.new("double *")
+        channel_number_ptr = ffi.new(LONG_PTR, channel_number)
+        measured_voltage_ptr = ffi.new(DOUBLE_PTR)
         result_code = Core.__lib.IV_getadc(
             channel_number_ptr, measured_voltage_ptr)
         return result_code, measured_voltage_ptr[0]
@@ -299,33 +304,33 @@ class Core:
     @staticmethod
     def IV_setmuxchannel(channel_number=0) -> int:
         '''Set channel of multiplexer, int=channelnr. starting from 0(default)'''
-        channel_number_ptr = ffi.new("long *", channel_number)
+        channel_number_ptr = ffi.new(LONG_PTR, channel_number)
         result_code = Core.__lib.IV_setmuxchannel(channel_number_ptr)
         return result_code
 
     @staticmethod
     def IV_setdigout(value: int) -> int:
         '''REVISE! Set digital lines on external port, int is bitmask'''
-        value_ptr = ffi.new("long *", value)
+        value_ptr = ffi.new(LONG_PTR, value)
         result_code = Core.__lib.IV_setdigout(value_ptr)
         return result_code
 
     @staticmethod
     def IV_getdigin() -> tuple[int, int]:
         '''REVISE! Returns status of digital inputs from external port, int is bitmask'''
-        value_ptr = ffi.new("long *")
+        value_ptr = ffi.new(LONG_PTR)
         result_code = Core.__lib.IV_getdigin(value_ptr)
         return result_code, value_ptr[0]
 
     @staticmethod
     def IV_setfrequency(frequency: float) -> int:
-        frequency_ptr = ffi.new("double *", frequency)
+        frequency_ptr = ffi.new(DOUBLE_PTR, frequency)
         result_code: int = Core.__lib.IV_setfrequency(frequency_ptr)
         return result_code
 
     @staticmethod
     def IV_setamplitude(amplitude: float) -> int:
-        amplitude_ptr = ffi.new("double *", amplitude)
+        amplitude_ptr = ffi.new(DOUBLE_PTR, amplitude)
         result_code: int = Core.__lib.IV_setamplitude(amplitude_ptr)
         return result_code
 
@@ -333,9 +338,9 @@ class Core:
     def IV_getcurrenttrace(points_quantity: int, interval_rate: float) -> tuple[int, float]:
         '''Returns a sequence of measured currents at defined samplingrate
             (npoints, interval, array of double): npoints<=256, interval: 10us to 20ms'''
-        points_quantity_ptr = ffi.new("long *", points_quantity)
-        interval_rate_ptr = ffi.new("double *", interval_rate)
-        result_ptr = ffi.new("double *")
+        points_quantity_ptr = ffi.new(LONG_PTR, points_quantity)
+        interval_rate_ptr = ffi.new(DOUBLE_PTR, interval_rate)
+        result_ptr = ffi.new(DOUBLE_PTR)
         result_code = Core.__lib.IV_getcurrenttrace(
             points_quantity_ptr, interval_rate_ptr, result_ptr)
         return result_code, result_ptr[0]
@@ -344,9 +349,9 @@ class Core:
     def IV_getcurrentWE2trace(points_quantity: int, interval_rate: float) -> tuple[int, float]:
         '''Returns a sequence of measured WE2 currents at defined samplingrate
             (npoints, interval, array of double): npoints<=256, interval: 10us to 20ms'''
-        points_quantity_ptr = ffi.new("long *", points_quantity)
-        interval_rate_ptr = ffi.new("double *", interval_rate)
-        result_ptr = ffi.new("double *")
+        points_quantity_ptr = ffi.new(LONG_PTR, points_quantity)
+        interval_rate_ptr = ffi.new(DOUBLE_PTR, interval_rate)
+        result_ptr = ffi.new(DOUBLE_PTR)
         result_code = Core.__lib.IV_getcurrentWE2trace(
             points_quantity_ptr, interval_rate_ptr, result_ptr)
         return result_code, result_ptr[0]
@@ -355,9 +360,9 @@ class Core:
     def IV_getpotentialtrace(points_quantity: int, interval_rate: float) -> tuple[int, float]:
         '''Returns a sequence of measured potentials at defined samplingrate
             (npoints, interval, array of double): npoints<=256, interval: 10us to 20ms'''
-        points_quantity_ptr = ffi.new("long *", points_quantity)
-        interval_rate_ptr = ffi.new("double *", interval_rate)
-        result_ptr = ffi.new("double *")
+        points_quantity_ptr = ffi.new(LONG_PTR, points_quantity)
+        interval_rate_ptr = ffi.new(DOUBLE_PTR, interval_rate)
+        result_ptr = ffi.new(DOUBLE_PTR)
         result_code = Core.__lib.IV_getpotentialtrace(
             points_quantity_ptr, interval_rate_ptr, result_ptr)
         return result_code, result_ptr[0]
@@ -369,7 +374,7 @@ class Core:
     @staticmethod
     def IV_we32setchannel(channel_index: int) -> int:
         '''Select active WE32 channel (chan)'''
-        channel_index_ptr = ffi.new("long *", channel_index)
+        channel_index_ptr = ffi.new(LONG_PTR, channel_index)
         result_code = Core.__lib.IV_we32setchannel(channel_index_ptr)
         return result_code
 
@@ -377,8 +382,8 @@ class Core:
     def IV_we32setoffset(channel_index: int, value: float) -> int:
         '''Set WE32 offset (chan,value), value -2 to +2V.
             Use chan=0 to apply the same offset to all channels.'''
-        channel_index_ptr = ffi.new("long *", channel_index)
-        value_ptr = ffi.new("double *", value)
+        channel_index_ptr = ffi.new(LONG_PTR, channel_index)
+        value_ptr = ffi.new(DOUBLE_PTR, value)
         result_code = Core.__lib.IV_we32setoffset(channel_index_ptr, value_ptr)
         return result_code
 
@@ -386,8 +391,8 @@ class Core:
     def IV_we32setoffsets(number_of_channels: int, value: float) -> int:
         '''REVISE! Set WE32 offsets values (Nchan,values),
             with Nchan the number of channels (1..32)'''
-        number_of_channels_index_ptr = ffi.new("long *", number_of_channels)
-        value_ptr = ffi.new("double *", value)
+        number_of_channels_index_ptr = ffi.new(LONG_PTR, number_of_channels)
+        value_ptr = ffi.new(DOUBLE_PTR, value)
         result_code = Core.__lib.IV_we32setoffsets(
             number_of_channels_index_ptr, value_ptr)
         return result_code
@@ -396,8 +401,8 @@ class Core:
     def IV_we32getoffsets(number_of_channels: int) -> tuple[int, float]:
         '''REVISE! Returns actual WE32 offset values (Nchan,values),
             with Nchan the number of channels (1..32)'''
-        number_of_channels_index_ptr = ffi.new("long *", number_of_channels)
-        values_ptr = ffi.new("double *")
+        number_of_channels_index_ptr = ffi.new(LONG_PTR, number_of_channels)
+        values_ptr = ffi.new(DOUBLE_PTR)
         result_code = Core.__lib.IV_we32getoffsets(
             number_of_channels_index_ptr, values_ptr)
         return result_code, values_ptr[0]
@@ -406,7 +411,7 @@ class Core:
     def IV_we32readcurrents() -> tuple[int, float]:
         '''REVISE! Returns array with 32 WE32 current values,
             that are measured simultaneously'''
-        current_values_ptr = ffi.new("double *")
+        current_values_ptr = ffi.new(DOUBLE_PTR)
         result_code = Core.__lib.IV_we32readcurrents(current_values_ptr)
         return result_code, current_values_ptr[0]
 
@@ -419,18 +424,18 @@ class Core:
         '''Loads method procedure previously saved to a file.
             method_file_path represents the full path to the file.'''
         method_file_path_ptr = ffi.new(
-            "char []", method_file_path.encode("utf-8"))
+            CHAR_ARRAY, method_file_path.encode(UTF_ENCODING))
         result_code = Core.__lib.IV_readmethod(method_file_path_ptr)
-        return result_code, ffi.string(method_file_path_ptr).decode("utf-8")
+        return result_code, ffi.string(method_file_path_ptr).decode(UTF_ENCODING)
 
     @staticmethod
     def IV_savemethod(method_file_path: str) -> tuple[int, str]:
         '''Saves currently loaded method procedure to a file.
             method_file_path represents the full path to the new file.'''
         method_file_path_ptr = ffi.new(
-            "char []", method_file_path.encode("utf-8"))
+            CHAR_ARRAY, method_file_path.encode(UTF_ENCODING))
         result_code = Core.__lib.IV_savemethod(method_file_path_ptr)
-        return result_code, ffi.string(method_file_path_ptr).decode("utf-8")
+        return result_code, ffi.string(method_file_path_ptr).decode(UTF_ENCODING)
 
     @staticmethod
     def IV_startmethod(method_file_path='') -> tuple[int, str]:
@@ -439,9 +444,9 @@ class Core:
             If the full path to a previously saved method is provided
             then the procedure is loaded from the file and started.'''
         method_file_path_ptr = ffi.new(
-            "char []", method_file_path.encode("utf-8"))
+            CHAR_ARRAY, method_file_path.encode(UTF_ENCODING))
         result_code = Core.__lib.IV_startmethod(method_file_path_ptr)
-        return result_code, ffi.string(method_file_path_ptr).decode("utf-8")
+        return result_code, ffi.string(method_file_path_ptr).decode(UTF_ENCODING)
 
     @staticmethod
     def IV_abort() -> int:
@@ -453,17 +458,18 @@ class Core:
         '''Saves the results of the last method execution into a file.
             method_file_path represents the full path to the new file.'''
         method_data_file_path_ptr = ffi.new(
-            "char []", method_data_file_path.encode("utf-8"))
+            CHAR_ARRAY, method_data_file_path.encode(UTF_ENCODING))
         result_code = Core.__lib.IV_savedata(method_data_file_path_ptr)
-        return result_code, ffi.string(method_data_file_path_ptr).decode("utf-8")
+        return result_code, ffi.string(method_data_file_path_ptr).decode(UTF_ENCODING)
 
     @staticmethod
     def IV_setmethodparameter(parameter_name: str, parameter_value: str) -> int:
         '''Allows updating the parameter values for the currently loaded method procedrue.
             It only works for text based parameters and dropdowns (multiple option selectors).'''
-        parameter_name_ptr = ffi.new("char []", parameter_name.encode("utf-8"))
+        parameter_name_ptr = ffi.new(
+            CHAR_ARRAY, parameter_name.encode(UTF_ENCODING))
         parameter_value_ptr = ffi.new(
-            "char []", parameter_value.encode("utf-8"))
+            CHAR_ARRAY, parameter_value.encode(UTF_ENCODING))
         result_code = Core.__lib.IV_setmethodparameter(
             parameter_name_ptr, parameter_value_ptr)
         return result_code
@@ -471,7 +477,7 @@ class Core:
     @staticmethod
     def IV_Ndatapoints() -> tuple[int, int]:
         '''Returns actual available number of datapoints: indicates the progress during a run'''
-        data_point_ptr = ffi.new("long *")
+        data_point_ptr = ffi.new(LONG_PTR)
         result_code = Core.__lib.IV_Ndatapoints(data_point_ptr)
         return result_code, data_point_ptr[0]
 
@@ -480,10 +486,10 @@ class Core:
         '''Get the data from a datapoint with index int, returns 3 values that depend on
             the used technique. For example LSV/CV methods return (E/I/0) Transient methods
             return (time/I,E/0), Impedance methods return (Z1,Z2,freq) etc.'''
-        selected_data_point_index_ptr = ffi.new("long *", data_point_index)
-        measured_value1_ptr = ffi.new("double *")
-        measured_value2_ptr = ffi.new("double *")
-        measured_value3_ptr = ffi.new("double *")
+        selected_data_point_index_ptr = ffi.new(LONG_PTR, data_point_index)
+        measured_value1_ptr = ffi.new(DOUBLE_PTR)
+        measured_value2_ptr = ffi.new(DOUBLE_PTR)
+        measured_value3_ptr = ffi.new(DOUBLE_PTR)
         result_code = Core.__lib.IV_getdata(
             selected_data_point_index_ptr, measured_value1_ptr, measured_value2_ptr, measured_value3_ptr)
         return result_code, measured_value1_ptr[0], measured_value2_ptr[0], measured_value3_ptr[0]
@@ -492,11 +498,11 @@ class Core:
     def IV_getdatafromline(data_point_index: int, scan_index: int) -> tuple[int, float, float, float]:
         '''Same as get_data_point, but with the additional scan_index parameter.
             This function will allow reading data from non-selected (previous) scans.'''
-        selected_data_point_index_ptr = ffi.new("long *", data_point_index)
-        selected_line_index_ptr = ffi.new("long *", scan_index)
-        measured_value1_ptr = ffi.new("double *")
-        measured_value2_ptr = ffi.new("double *")
-        measured_value3_ptr = ffi.new("double *")
+        selected_data_point_index_ptr = ffi.new(LONG_PTR, data_point_index)
+        selected_line_index_ptr = ffi.new(LONG_PTR, scan_index)
+        measured_value1_ptr = ffi.new(DOUBLE_PTR)
+        measured_value2_ptr = ffi.new(DOUBLE_PTR)
+        measured_value3_ptr = ffi.new(DOUBLE_PTR)
         result_code = Core.__lib.IV_getdatafromline(
             selected_data_point_index_ptr,
             selected_line_index_ptr,
