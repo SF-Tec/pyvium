@@ -19,7 +19,7 @@
 | :heavy_check_mark: get_dll_version()                  | :heavy_check_mark: IV_VersionDll()        |
 |                                                       | :heavy_check_mark: IV_VersionCheck()      |
 |                                                       | :heavy_check_mark: IV_HostHandle()                |
-|                                                       | :heavy_check_mark: IV_VersionDllFile()            |
+| :heavy_check_mark: get_iviumsoft_version()            | :heavy_check_mark: IV_VersionDllFile()            |
 |                                                       | :heavy_check_mark: IV_VersionDllFileStr()         |
 | :heavy_check_mark: select_channel(int)                | :heavy_check_mark: IV_SelectChannel(int)          |
 | :heavy_check_mark: get_cell_status()                  |  :heavy_check_mark: IV_getcellstatus()            |
