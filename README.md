@@ -52,5 +52,5 @@ Pyvium.close_driver()
 The list of currently supported and implemented functions can be found [here](https://github.com/SF-Tec/pyvium/blob/main/docs/method_list.md).
 ## Links
 
-* [See on GitHub](https://github.com/sftec/pyvium)
+* [See on GitHub](https://github.com/sf-tec/pyvium)
 * [See on PyPI](https://pypi.org/project/pyvium)
