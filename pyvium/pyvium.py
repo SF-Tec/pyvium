@@ -119,13 +119,6 @@ class Pyvium:
         Core.IV_connect(0)
 
     @staticmethod
-    def version_Host(version_host: int) -> tuple[int, int]:
-        '''REVISE!!! Returns the version Host'''
-        version_host_ptr = ffi.new(LONG_PTR, version_host)
-        result_code = Core.__lib.IV_VersionHost(version_host_ptr)
-        return result_code, version_host_ptr[0]
-
-    @staticmethod
     def get_dll_version() -> int:
         '''Returns the version of the IviumSoft dll'''
         PyviumVerifiers.verify_driver_is_open()
