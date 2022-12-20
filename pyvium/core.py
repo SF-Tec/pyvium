@@ -66,7 +66,7 @@ ffi.cdef("""
 IVIUM_DLL_PATH = get_ivium_dll_path()
 
 CHAR_ARRAY = "char[]"
-DOUBLE_PTR = "long *"
+DOUBLE_PTR = "double *"
 LONG_PTR = "long *"
 UTF_ENCODING = "utf-8"
 
