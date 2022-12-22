@@ -51,5 +51,5 @@ class PyviumVerifiers:
     def verify_cell_is_on():
         '''Raise exception if the is off'''
         _, device_status = Core.IV_getcellstatus()
-        if 'Cell on' not in device_status:
+        if not device_status:
             raise CellOffError
