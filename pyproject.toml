@@ -9,13 +9,13 @@ license = "Apache-2.0"
 name = "pyvium"
 packages = [{include = "pyvium"}]
 readme = "README.md"
-version = "0.1.1a12"
+version = "0.1.2beta"
 classifiers = [
     # How mature is this project? Common values are
     #   3 - Alpha
     #   4 - Beta
     #   5 - Production/Stable
-    'Development Status :: 3 - Alpha',
+    'Development Status :: 4 - Beta',
 
     # Indicate who your project is intended for
     'Intended Audience :: Developers',
