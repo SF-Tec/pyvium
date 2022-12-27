@@ -59,7 +59,7 @@ class Pyvium:
 
     @staticmethod
     def get_active_iviumsoft_instances():
-        '''Returns a list of active(opened) IviumSoft instances'''
+        '''Returns a list of active(open) IviumSoft instances'''
         PyviumVerifiers.verify_driver_is_open()
         active_instances = []
         first_active_instance_number = 0
@@ -134,7 +134,7 @@ class Pyvium:
         return v[:1] + '.' + v[1:]
 
     @staticmethod
-    def select_channel(chanel_number: int):
+    def select_channel(channel_number: int):
         '''Sending the integer value communicates with Multichannel control:
             if not yet active, the [int] number of tabs is automatically opened and the [int] tab becomes active;
             if Ivium-n-Soft is active already, the [int] tab becomes active.
@@ -142,7 +142,7 @@ class Pyvium:
             If no instrument is connected, the next available instrument in the list can be connected (IV_connect) and controlled.'''
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
-        Core.IV_SelectChannel(chanel_number)
+        Core.IV_SelectChannel(channel_number)
 
     ###############################
     #### DIRECT MODE FUNCTIONS ####

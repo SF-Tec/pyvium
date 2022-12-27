@@ -34,7 +34,7 @@ Core.IV_close()
 ## Usage Example (Using Pyvium methods)
 
 This is a wrapper around the Core functions that adds a few things:
-- Exception management (you can find an example [here](https://github.com/SF-Tec/pyvium/blob/main/docs/error_management.md)
+- Exception management (you can find an example [here](https://github.com/SF-Tec/pyvium/blob/main/docs/error_management.md))
 - New functionalities
 
 ```
