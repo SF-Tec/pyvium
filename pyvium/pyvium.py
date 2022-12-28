@@ -213,7 +213,7 @@ class Pyvium:
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
         PyviumVerifiers.verify_device_is_connected_to_iviumsoft()
-        Core.IV_setpotentialWE2(current_value)
+        Core.IV_setcurrent(current_value)
 
     @staticmethod
     def get_potential() -> float:
