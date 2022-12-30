@@ -56,7 +56,7 @@
 | :heavy_check_mark: save_method(str) |  :heavy_check_mark: IV_savemethod(fname)|
 | :heavy_check_mark: start_method(str) |  :heavy_check_mark: IV_startmethod(fname)|
 | :heavy_check_mark: abort_method() |  :heavy_check_mark: IV_abort()|
-| :heavy_check_mark: save_method_data(str) |  :heavy_check_mark: IV_savedata(fname)|
+| :heavy_check_mark: save_data(str) |  :heavy_check_mark: IV_savedata(fname)|
 | :heavy_check_mark: set_method_parameter(str, str) |  :heavy_check_mark: IV_setmethodparameter(parname, parvalue)|
 | :heavy_check_mark: get_available_data_points_number() |  :heavy_check_mark: IV_Ndatapoints(value)|
 | :heavy_check_mark: get_data_point(int) |  :heavy_check_mark: IV_getdata(pointnr, x, y, z)|
