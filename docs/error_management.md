@@ -1,4 +1,3 @@
-
 ```
 form pyvium import Pyvium
 from pyvium.errors import DeviceNotConnectedToIviumSoftError, IviumSoftNotRunningError
@@ -13,12 +12,11 @@ except DeviceNotConnectedToIviumSoftError:
 
 ```
 
-
-| Available errors                      |
-| ------------------------------------- |
-| DeviceBusyError                       |
-| DeviceNotConnectedToIviumSoftError    |
-| DriverNotOpenError                    |
-| NoDeviceDetectedError                 |
-| IviumSoftNotRunningError              |
-| CellOffError                          |
+| Available errors                   |
+| ---------------------------------- |
+| DeviceBusyError                    |
+| DeviceNotConnectedToIviumSoftError |
+| DriverNotOpenError                 |
+| NoDeviceDetectedError              |
+| IviumSoftNotRunningError           |
+| CellOffError                       |
