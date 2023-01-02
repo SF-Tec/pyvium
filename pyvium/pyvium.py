@@ -130,16 +130,19 @@ class Pyvium:
         PyviumVerifiers.verify_driver_is_open()
         version_str = str(Core.IV_VersionDllFile())[slice(5)]
         sliced_str = slice(5)
-        v = version_str[sliced_str]
-        return v[:1] + '.' + v[1:]
+        version = version_str[sliced_str]
+        return version[:1] + '.' + version[1:]
 
     @staticmethod
     def select_channel(channel_number: int):
         '''Sending the integer value communicates with Multichannel control:
-            if not yet active, the [int] number of tabs is automatically opened and the [int] tab becomes active;
+            if not yet active,
+            the [int] number of tabs is automatically opened and the [int] tab becomes active;
             if Ivium-n-Soft is active already, the [int] tab becomes active.
             Now the channel/instrument that is connected to this tab can be controlled.
-            If no instrument is connected, the next available instrument in the list can be connected (IV_connect) and controlled.'''
+            If no instrument is connected,
+            the next available instrument in the list can be connected (IV_connect) and
+            controlled.'''
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
         Core.IV_SelectChannel(channel_number)
@@ -278,7 +281,8 @@ class Pyvium:
     def set_bistat_mode(value: int):
         '''REVISE! --> IV_bistat_mode(int) in documentation
             Select mode for BiStat, for int 0=standard, 1=scanning
-            This bistat_mode function also can be used to control the Automatic E-ranging function of the instrument;
+            This bistat_mode function also can be used to control
+            the Automatic E-ranging function of the instrument;
             0=AutoEranging off; 1=AutoEranging on'''
         PyviumVerifiers.verify_driver_is_open()
         PyviumVerifiers.verify_iviumsoft_is_running()
