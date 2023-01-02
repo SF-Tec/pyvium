@@ -123,13 +123,13 @@ class Pyvium:
         '''Returns the version of the IviumSoft dll'''
         PyviumVerifiers.verify_driver_is_open()
         return Core.IV_VersionDll()
-    
+
     @staticmethod
     def get_iviumsoft_version() -> str:
         '''Returns the version of the IviumSoft that match with this pyvium version'''
         PyviumVerifiers.verify_driver_is_open()
-        version_str = str(Core.IV_VersionDllFile())[slice (5)]
-        sliced_str = slice (5)
+        version_str = str(Core.IV_VersionDllFile())[slice(5)]
+        sliced_str = slice(5)
         v = version_str[sliced_str]
         return v[:1] + '.' + v[1:]
 
