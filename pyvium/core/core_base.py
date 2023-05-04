@@ -13,12 +13,7 @@ class CoreBase:
     Base class for providing shared state and methods related to Ivium driver.
     """
     __is_driver_open = False
-    __lib = None
-
-    def __init__(self) -> None:
-        if CoreBase.__lib is None:
-            ivium_dll_path = get_ivium_dll_path()
-            CoreBase.__lib = ffi.dlopen(ivium_dll_path)
+    __lib = ffi.dlopen(get_ivium_dll_path())
 
     @staticmethod
     def get_lib() -> Any:
