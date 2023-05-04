@@ -1,4 +1,5 @@
-from .base import CHAR_ARRAY, DOUBLE_PTR, LONG_PTR, UTF_ENCODING, Base, ffi
+from .constants import CHAR_ARRAY, DOUBLE_PTR, LONG_PTR, UTF_ENCODING
+from .core_base import CoreBase, ffi
 
 ffi.cdef("""
     long __stdcall IV_readmethod(char *fname);
@@ -13,14 +14,14 @@ ffi.cdef("""
 """)
 
 
-class MethodModeFunctions(Base):
+class MethodModeFunctions(CoreBase):
     @staticmethod
     def IV_readmethod(method_file_path: str) -> tuple[int, str]:
         '''Loads method procedure previously saved to a file.
             method_file_path represents the full path to the file.'''
         method_file_path_ptr = ffi.new(
             CHAR_ARRAY, method_file_path.encode(UTF_ENCODING))
-        result_code = Base.get_lib().IV_readmethod(method_file_path_ptr)
+        result_code = CoreBase.get_lib().IV_readmethod(method_file_path_ptr)
         return result_code, ffi.string(method_file_path_ptr).decode(UTF_ENCODING)
 
     @staticmethod
@@ -29,7 +30,7 @@ class MethodModeFunctions(Base):
             method_file_path represents the full path to the new file.'''
         method_file_path_ptr = ffi.new(
             CHAR_ARRAY, method_file_path.encode(UTF_ENCODING))
-        result_code = Base.get_lib().IV_savemethod(method_file_path_ptr)
+        result_code = CoreBase.get_lib().IV_savemethod(method_file_path_ptr)
         return result_code, ffi.string(method_file_path_ptr).decode(UTF_ENCODING)
 
     @staticmethod
@@ -40,13 +41,13 @@ class MethodModeFunctions(Base):
             then the procedure is loaded from the file and started.'''
         method_file_path_ptr = ffi.new(
             CHAR_ARRAY, method_file_path.encode(UTF_ENCODING))
-        result_code = Base.get_lib().IV_startmethod(method_file_path_ptr)
+        result_code = CoreBase.get_lib().IV_startmethod(method_file_path_ptr)
         return result_code, ffi.string(method_file_path_ptr).decode(UTF_ENCODING)
 
     @staticmethod
     def IV_abort() -> int:
         '''Aborts the ongoing method procedure'''
-        return Base.get_lib().IV_abort()
+        return CoreBase.get_lib().IV_abort()
 
     @staticmethod
     def IV_savedata(method_data_file_path: str) -> tuple[int, str]:
@@ -54,7 +55,7 @@ class MethodModeFunctions(Base):
             method_file_path represents the full path to the new file.'''
         method_data_file_path_ptr = ffi.new(
             CHAR_ARRAY, method_data_file_path.encode(UTF_ENCODING))
-        result_code = Base.get_lib().IV_savedata(method_data_file_path_ptr)
+        result_code = CoreBase.get_lib().IV_savedata(method_data_file_path_ptr)
         return result_code, ffi.string(method_data_file_path_ptr).decode(UTF_ENCODING)
 
     @staticmethod
@@ -65,7 +66,7 @@ class MethodModeFunctions(Base):
             CHAR_ARRAY, parameter_name.encode(UTF_ENCODING))
         parameter_value_ptr = ffi.new(
             CHAR_ARRAY, parameter_value.encode(UTF_ENCODING))
-        result_code = Base.get_lib().IV_setmethodparameter(
+        result_code = CoreBase.get_lib().IV_setmethodparameter(
             parameter_name_ptr, parameter_value_ptr)
         return result_code
 
@@ -73,7 +74,7 @@ class MethodModeFunctions(Base):
     def IV_Ndatapoints() -> tuple[int, int]:
         '''Returns actual available number of datapoints: indicates the progress during a run'''
         data_point_ptr = ffi.new(LONG_PTR)
-        result_code = Base.get_lib().IV_Ndatapoints(data_point_ptr)
+        result_code = CoreBase.get_lib().IV_Ndatapoints(data_point_ptr)
         return result_code, data_point_ptr[0]
 
     @staticmethod
@@ -85,7 +86,7 @@ class MethodModeFunctions(Base):
         measured_value1_ptr = ffi.new(DOUBLE_PTR)
         measured_value2_ptr = ffi.new(DOUBLE_PTR)
         measured_value3_ptr = ffi.new(DOUBLE_PTR)
-        result_code = Base.get_lib().IV_getdata(
+        result_code = CoreBase.get_lib().IV_getdata(
             selected_data_point_index_ptr, measured_value1_ptr, measured_value2_ptr, measured_value3_ptr)
         return result_code, measured_value1_ptr[0], measured_value2_ptr[0], measured_value3_ptr[0]
 
@@ -98,7 +99,7 @@ class MethodModeFunctions(Base):
         measured_value1_ptr = ffi.new(DOUBLE_PTR)
         measured_value2_ptr = ffi.new(DOUBLE_PTR)
         measured_value3_ptr = ffi.new(DOUBLE_PTR)
-        result_code = Base.get_lib().IV_getdatafromline(
+        result_code = CoreBase.get_lib().IV_getdatafromline(
             selected_data_point_index_ptr,
             selected_line_index_ptr,
             measured_value1_ptr,
