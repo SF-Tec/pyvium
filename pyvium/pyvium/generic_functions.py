@@ -49,7 +49,7 @@ class GenericFunctions():
     def is_iviumsoft_running() -> bool:
         '''It returns true if if the selected instance of IviumSoft is running'''
         PyviumVerifiers.verify_driver_is_open()
-        return not Core.IV_getdevicestatus() == -1
+        return Core.IV_getdevicestatus() != -1
 
     @staticmethod
     def get_active_iviumsoft_instances():
@@ -60,7 +60,7 @@ class GenericFunctions():
         for instance_number in range(1, 32):
             Core.IV_selectdevice(instance_number)
 
-            if not Core.IV_getdevicestatus() == -1:
+            if Core.IV_getdevicestatus() != -1:
                 active_instances.append(instance_number)
 
                 if first_active_instance_number == 0:
