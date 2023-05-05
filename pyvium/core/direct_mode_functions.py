@@ -1,4 +1,5 @@
-from .base import DOUBLE_PTR, LONG_PTR, Base, ffi
+from .constants import DOUBLE_PTR, LONG_PTR
+from .core_base import CoreBase, ffi
 
 ffi.cdef("""
     long __stdcall IV_getcellstatus(long *devcellstatus);
@@ -28,14 +29,16 @@ ffi.cdef("""
 """)
 
 
-class DirectModeFunctions(Base):
-
+class DirectModeFunctions(CoreBase):
+    """
+    DirectModeFunctions class provides access to the direct mode functions of the IviumSoft library.
+    """
     @staticmethod
     def IV_getcellstatus() -> tuple[int, int]:
         '''Returns cell status labels
             ["I_ovl", "Anin1_ovl","E_ovl", "CellOff_button pressed", "Cell on"]'''
         cell_status_ptr = ffi.new(LONG_PTR)
-        result_code = Base.get_lib().IV_getcellstatus(cell_status_ptr)
+        result_code = CoreBase.get_lib().IV_getcellstatus(cell_status_ptr)
         return result_code, cell_status_ptr[0]
 
     @staticmethod
@@ -46,7 +49,7 @@ class DirectModeFunctions(Base):
             3=EstatDummy1,4=EStatDummy2,5=EstatDummy3,6=EstatDummy4
             7=Istat4EL, 8=Istat2EL, 9=IstatDummy, 10=BiStat4EL, 11=BiStat2EL'''
         connection_mode_number_ptr = ffi.new(LONG_PTR, connection_mode_number)
-        result_code = Base.get_lib().IV_setconnectionmode(
+        result_code = CoreBase.get_lib().IV_setconnectionmode(
             connection_mode_number_ptr)
         return result_code
 
@@ -54,7 +57,7 @@ class DirectModeFunctions(Base):
     def IV_setcellon(cell_on_mode_number: int) -> int:
         '''Set cell on off to close cell relais (0=off;1=on)'''
         cell_on_mode_number_ptr = ffi.new(LONG_PTR, cell_on_mode_number)
-        result_code = Base.get_lib().IV_setcellon(
+        result_code = CoreBase.get_lib().IV_setcellon(
             cell_on_mode_number_ptr)
         return result_code
 
@@ -62,42 +65,42 @@ class DirectModeFunctions(Base):
     def IV_setpotential(potential_value: float) -> int:
         '''Set cell potential'''
         potential_value_ptr = ffi.new(DOUBLE_PTR, potential_value)
-        result_code = Base.get_lib().IV_setpotential(potential_value_ptr)
+        result_code = CoreBase.get_lib().IV_setpotential(potential_value_ptr)
         return result_code
 
     @staticmethod
     def IV_setpotentialWE2(potential_we2_value: float) -> int:
         '''Set BiStat offset potential'''
         potential_we2_value_ptr = ffi.new(DOUBLE_PTR, potential_we2_value)
-        result_code = Base.get_lib().IV_setpotentialWE2(potential_we2_value_ptr)
+        result_code = CoreBase.get_lib().IV_setpotentialWE2(potential_we2_value_ptr)
         return result_code
 
     @staticmethod
     def IV_setcurrent(current_value: float) -> int:
         '''Set cell current (galvanostatic mode)'''
         current_value_ptr = ffi.new(DOUBLE_PTR, current_value)
-        result_code = Base.get_lib().IV_setpotentialWE2(current_value_ptr)
+        result_code = CoreBase.get_lib().IV_setpotentialWE2(current_value_ptr)
         return result_code
 
     @staticmethod
     def IV_getpotential() -> tuple[int, float]:
         '''Returns measured potential'''
         potential_value_ptr = ffi.new(DOUBLE_PTR)
-        result_code = Base.get_lib().IV_getpotential(potential_value_ptr)
+        result_code = CoreBase.get_lib().IV_getpotential(potential_value_ptr)
         return result_code, potential_value_ptr[0]
 
     @staticmethod
     def IV_setcurrentrange(current_range_number: int) -> int:
         '''Set current range, 0=10A, 1=1A, etc,'''
         current_range_number_ptr = ffi.new(LONG_PTR, current_range_number)
-        result_code = Base.get_lib().IV_setcurrentrange(current_range_number_ptr)
+        result_code = CoreBase.get_lib().IV_setcurrentrange(current_range_number_ptr)
         return result_code
 
     @staticmethod
     def IV_setcurrentrangeWE2(current_range_number: int) -> int:
         '''Set current range for BiStat, 0=10mA, 1=1mA, etc,'''
         current_range_number_ptr = ffi.new(LONG_PTR, current_range_number)
-        result_code = Base.get_lib().IV_setcurrentrangeWE2(
+        result_code = CoreBase.get_lib().IV_setcurrentrangeWE2(
             current_range_number_ptr)
         return result_code
 
@@ -105,28 +108,28 @@ class DirectModeFunctions(Base):
     def IV_getcurrent() -> tuple[int, float]:
         '''Returns measured current'''
         current_value_ptr = ffi.new(DOUBLE_PTR)
-        result_code = Base.get_lib().IV_getcurrent(current_value_ptr)
+        result_code = CoreBase.get_lib().IV_getcurrent(current_value_ptr)
         return result_code, current_value_ptr[0]
 
     @staticmethod
     def IV_getcurrentWE2() -> tuple[int, float]:
         '''Returns measured current from WE2 (bipotentiostat)'''
         current_value_ptr = ffi.new(DOUBLE_PTR)
-        result_code = Base.get_lib().IV_getcurrentWE2(current_value_ptr)
+        result_code = CoreBase.get_lib().IV_getcurrentWE2(current_value_ptr)
         return result_code, current_value_ptr[0]
 
     @staticmethod
     def IV_setfilter(filter_number: int) -> int:
         '''Set filter, for int :0=1MHz, 1=100kHz, 2=10kHz, 3=1kHz, 4=10Hz'''
         filter_number_ptr = ffi.new(LONG_PTR, filter_number)
-        result_code = Base.get_lib().IV_setfilter(filter_number_ptr)
+        result_code = CoreBase.get_lib().IV_setfilter(filter_number_ptr)
         return result_code
 
     @staticmethod
     def IV_setstability(stability_number: int) -> int:
         '''Set stability, for int 0=HighSpeed, 1=Standard, 2=HighStability'''
         stability_number_ptr = ffi.new(LONG_PTR, stability_number)
-        result_code = Base.get_lib().IV_setstability(stability_number_ptr)
+        result_code = CoreBase.get_lib().IV_setstability(stability_number_ptr)
         return result_code
 
     @staticmethod
@@ -136,7 +139,7 @@ class DirectModeFunctions(Base):
             This bistat_mode function also can be used to control the Automatic E-ranging function of the instrument;
             0=AutoEranging off; 1=AutoEranging on'''
         value_ptr = ffi.new(LONG_PTR, value)
-        result_code = Base.get_lib().IV_setbistatmode(value_ptr)
+        result_code = CoreBase.get_lib().IV_setbistatmode(value_ptr)
         return result_code
 
     @staticmethod
@@ -144,7 +147,7 @@ class DirectModeFunctions(Base):
         '''Set dac on external port, int=0 for dac1, int=1 for dac2'''
         channel_number_ptr = ffi.new(LONG_PTR, channel_number)
         value_ptr = ffi.new(DOUBLE_PTR, value)
-        result_code = Base.get_lib().IV_setdac(channel_number_ptr, value_ptr)
+        result_code = CoreBase.get_lib().IV_setdac(channel_number_ptr, value_ptr)
         return result_code
 
     @staticmethod
@@ -152,7 +155,7 @@ class DirectModeFunctions(Base):
         '''REVISE! Returns measured voltage on external ADC port, int=channelnr. 0-7'''
         channel_number_ptr = ffi.new(LONG_PTR, channel_number)
         measured_voltage_ptr = ffi.new(DOUBLE_PTR)
-        result_code = Base.get_lib().IV_getadc(
+        result_code = CoreBase.get_lib().IV_getadc(
             channel_number_ptr, measured_voltage_ptr)
         return result_code, measured_voltage_ptr[0]
 
@@ -160,33 +163,33 @@ class DirectModeFunctions(Base):
     def IV_setmuxchannel(channel_number=0) -> int:
         '''Set channel of multiplexer, int=channelnr. starting from 0(default)'''
         channel_number_ptr = ffi.new(LONG_PTR, channel_number)
-        result_code = Base.get_lib().IV_setmuxchannel(channel_number_ptr)
+        result_code = CoreBase.get_lib().IV_setmuxchannel(channel_number_ptr)
         return result_code
 
     @staticmethod
     def IV_setdigout(value: int) -> int:
         '''REVISE! Set digital lines on external port, int is bitmask'''
         value_ptr = ffi.new(LONG_PTR, value)
-        result_code = Base.get_lib().IV_setdigout(value_ptr)
+        result_code = CoreBase.get_lib().IV_setdigout(value_ptr)
         return result_code
 
     @staticmethod
     def IV_getdigin() -> tuple[int, int]:
         '''REVISE! Returns status of digital inputs from external port, int is bitmask'''
         value_ptr = ffi.new(LONG_PTR)
-        result_code = Base.get_lib().IV_getdigin(value_ptr)
+        result_code = CoreBase.get_lib().IV_getdigin(value_ptr)
         return result_code, value_ptr[0]
 
     @staticmethod
     def IV_setfrequency(frequency: float) -> int:
         frequency_ptr = ffi.new(DOUBLE_PTR, frequency)
-        result_code: int = Base.get_lib().IV_setfrequency(frequency_ptr)
+        result_code: int = CoreBase.get_lib().IV_setfrequency(frequency_ptr)
         return result_code
 
     @staticmethod
     def IV_setamplitude(amplitude: float) -> int:
         amplitude_ptr = ffi.new(DOUBLE_PTR, amplitude)
-        result_code: int = Base.get_lib().IV_setamplitude(amplitude_ptr)
+        result_code: int = CoreBase.get_lib().IV_setamplitude(amplitude_ptr)
         return result_code
 
     @staticmethod
@@ -196,7 +199,7 @@ class DirectModeFunctions(Base):
         points_quantity_ptr = ffi.new(LONG_PTR, points_quantity)
         interval_rate_ptr = ffi.new(DOUBLE_PTR, interval_rate)
         result_ptr = ffi.new(DOUBLE_PTR)
-        result_code = Base.get_lib().IV_getcurrenttrace(
+        result_code = CoreBase.get_lib().IV_getcurrenttrace(
             points_quantity_ptr, interval_rate_ptr, result_ptr)
         return result_code, result_ptr[0]
 
@@ -207,7 +210,7 @@ class DirectModeFunctions(Base):
         points_quantity_ptr = ffi.new(LONG_PTR, points_quantity)
         interval_rate_ptr = ffi.new(DOUBLE_PTR, interval_rate)
         result_ptr = ffi.new(DOUBLE_PTR)
-        result_code = Base.get_lib().IV_getcurrentWE2trace(
+        result_code = CoreBase.get_lib().IV_getcurrentWE2trace(
             points_quantity_ptr, interval_rate_ptr, result_ptr)
         return result_code, result_ptr[0]
 
@@ -218,6 +221,6 @@ class DirectModeFunctions(Base):
         points_quantity_ptr = ffi.new(LONG_PTR, points_quantity)
         interval_rate_ptr = ffi.new(DOUBLE_PTR, interval_rate)
         result_ptr = ffi.new(DOUBLE_PTR)
-        result_code = Base.get_lib().IV_getpotentialtrace(
+        result_code = CoreBase.get_lib().IV_getpotentialtrace(
             points_quantity_ptr, interval_rate_ptr, result_ptr)
         return result_code, result_ptr[0]
