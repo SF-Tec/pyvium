@@ -1,16 +1,7 @@
 import os
 import csv
 
-def get_file_list(dir_path='.'):
-    '''Obtains a list of files in a directory'''
-    file_list= []
-    normalized_path = os.path.normpath(dir_path)
-    for path in os.listdir(normalized_path):
-        if os.path.isfile(os.path.join(normalized_path, path)):
-            file_list.append(path)
-    
-    return file_list
-    
+from ..util import get_file_list
 
 class DataProcessing():
     @staticmethod
@@ -42,17 +33,17 @@ class DataProcessing():
         return data
 
     @staticmethod
-    def convert_idf_to_csv(self, idf_path='.'):
+    def convert_idf_to_csv(idf_path='.'):
         '''Extracts the data from a ivium .ids and saves the data to a .csv'''
         path = os.path.normpath(idf_path)
-        data = self.get_idf_data(path)
-        self.export_to_csv(data,path+'.csv')
+        data = DataProcessing.get_idf_data(path)
+        DataProcessing.export_to_csv(data,path+'.csv')
     
     @staticmethod
-    def convert_idf_dir_to_csv(self, idf_dir_path='.'):
+    def convert_idf_dir_to_csv(idf_dir_path='.'):
         '''Extracts the data of all .idf files on a directory and saves the data .csv files'''
         path = os.path.normpath(idf_dir_path)
         files = get_file_list(path)
         idf_files = list(filter(lambda file: (file[-4:] == '.idf'), files))
         for idf_filename in idf_files:
-            self.convert_idf_to_csv(path+'\\'+idf_filename)
+            DataProcessing.convert_idf_to_csv(path+'\\'+idf_filename)
