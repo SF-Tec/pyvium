@@ -1,5 +1,6 @@
 import os
 import csv
+from tqdm import tqdm
 
 from ..util import get_file_list
 
@@ -53,5 +54,5 @@ class DataProcessing():
         path = os.path.normpath(idf_dir_path)
         files = get_file_list(path)
         idf_files = list(filter(lambda file: (file[-4:] == '.idf'), files))
-        for idf_filename in idf_files:
+        for idf_filename in tqdm(idf_files):
             DataProcessing.convert_idf_to_csv(path+'\\'+idf_filename)
