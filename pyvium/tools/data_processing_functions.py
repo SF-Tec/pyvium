@@ -17,9 +17,16 @@ class DataProcessing():
         '''Extracts the data from a ivium .ids and returns a lits of points (data matrix)'''
         data = []
 
-        with open(idf_path, 'r', encoding='UTF-8') as idf:
-            raw_data = idf.read()
+        try:
+            # open and read idf file
+            with open(idf_path, 'r', encoding='ISO-8859-2') as idf:
+                raw_data = idf.read()
+    
+            # split the file into a list of lines
             lines = raw_data.splitlines()
+        except Exception as error:
+            print(idf_path,str(error))
+            return data
     
         for index,line in enumerate(lines):
             if 'primary_data' in line:
@@ -37,7 +44,8 @@ class DataProcessing():
         '''Extracts the data from a ivium .ids and saves the data to a .csv'''
         path = os.path.normpath(idf_path)
         data = DataProcessing.get_idf_data(path)
-        DataProcessing.export_to_csv(data,path+'.csv')
+        if len(data)>0:
+            DataProcessing.export_to_csv(data,path+'.csv')
     
     @staticmethod
     def convert_idf_dir_to_csv(idf_dir_path='.'):
