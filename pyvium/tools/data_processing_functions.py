@@ -8,7 +8,7 @@ class DataProcessing():
     def export_to_csv(data,file_path):
         '''Saves data on a .csv'''
         path = os.path.normpath(file_path)
-        with open(path, 'w') as f:
+        with open(path, 'w', encoding='UTF-8') as f:
             write = csv.writer(f)
             write.writerows(data)
 
