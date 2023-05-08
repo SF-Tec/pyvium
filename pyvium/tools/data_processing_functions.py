@@ -17,7 +17,7 @@ class DataProcessing():
         '''Extracts the data from a ivium .ids and returns a lits of points (data matrix)'''
         data = []
 
-        with open(idf_path, 'r', encoding='cp1252') as idf:
+        with open(idf_path, 'r', encoding='UTF-8') as idf:
             raw_data = idf.read()
             lines = raw_data.splitlines()
     
@@ -33,7 +33,7 @@ class DataProcessing():
         return data
 
     @staticmethod
-    def convert_idf_to_csv(idf_path='.'):
+    def convert_idf_to_csv(idf_path):
         '''Extracts the data from a ivium .ids and saves the data to a .csv'''
         path = os.path.normpath(idf_path)
         data = DataProcessing.get_idf_data(path)

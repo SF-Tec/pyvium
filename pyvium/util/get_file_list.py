@@ -1,3 +1,4 @@
+import os
 def get_file_list(dir_path='.'):
     '''Obtains a list of files in a directory'''
     file_list= []
