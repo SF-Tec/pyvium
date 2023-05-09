@@ -15,7 +15,7 @@ class DataProcessing():
 
     @staticmethod
     def get_idf_data(idf_path) -> list:
-        '''Extracts the data from a ivium .ids and returns a lits of points (data matrix)'''
+        '''Extracts the data from a ivium .idf and returns a lits of points (data matrix)'''
         data = []
 
         try:
@@ -42,7 +42,7 @@ class DataProcessing():
 
     @staticmethod
     def convert_idf_to_csv(idf_path):
-        '''Extracts the data from a ivium .ids and saves the data to a .csv'''
+        '''Extracts the data from a ivium .idf and saves the data to a .csv'''
         path = os.path.normpath(idf_path)
         data = DataProcessing.get_idf_data(path)
         if len(data)>0:
