@@ -70,4 +70,4 @@
 | :heavy_check_mark: export_to_csv(data,file_path) |Saves data on a .csv                                             |
 | :heavy_check_mark: get_idf_data(idf_path)        |Extracts the data from a ivium .idf and returns a lits of points (data matrix) |
 | :heavy_check_mark: convert_idf_to_csv(idf_path)  |Extracts the data from a ivium .idf and saves the data to a .csv |
-| :heavy_check_mark: convert_idf_dir_to_csv(idf_dir_path='.')  |Extracts the data of all .idf files on a directory and saves the data .csv files |
+| :heavy_check_mark: convert_idf_dir_to_csv(idf_dir_path='.')  |Extracts the data of all .idf files on a directory and saves the data to .csv files |
