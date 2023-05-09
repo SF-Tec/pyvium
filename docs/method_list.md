@@ -64,8 +64,8 @@
 | :heavy_check_mark: get_data_point_from_scan(int, int)  | :heavy_check_mark: IV_getdatafromline(pointnr, scannr, x, y, z) |
 |                                                        | :small_orange_diamond: IV_getDbFileName(fname)                  |
 
-
-| Tools Methods                                    | Description                                                     |
+## Tools Methods
+| Tools Methods (DataProcessing)                   | Description                                                     |
 | ------------------------------------------------ | --------------------------------------------------------------- |
 | :heavy_check_mark: export_to_csv(data,file_path) |Saves data on a .csv                                             |
 | :heavy_check_mark: get_idf_data(idf_path)        |Extracts the data from a ivium .idf and returns a lits of points (data matrix) |
