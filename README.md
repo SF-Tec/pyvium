@@ -51,13 +51,13 @@ Pyvium.close_driver()
 ```
 ## Usage Example (Using Tools methods)
 
-This offer further functionality on data processing:
+This offers further functionality in data processing:
 
 
 ```
 from pyvium import Tools
 
-Tool.convert_idf_dir_to_csv()
+Tools.convert_idf_dir_to_csv()
 
 ```
 
