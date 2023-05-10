@@ -7,7 +7,7 @@ from ..util import get_file_list
 class DataProcessing():
     @staticmethod
     def export_to_csv(data,file_path):
-        '''Saves data on a .csv'''
+        '''Saves data on a .csv file'''
         path = os.path.normpath(file_path)
         with open(path, 'w', encoding='UTF-8') as f:
             write = csv.writer(f)
@@ -15,7 +15,7 @@ class DataProcessing():
 
     @staticmethod
     def get_idf_data(idf_path) -> list:
-        '''Extracts the data from a ivium .idf and returns a lits of points (data matrix)'''
+        '''Extracts the data from a ivium .idf file and returns a lits of points (data matrix)'''
         data = []
 
         try:
@@ -42,7 +42,7 @@ class DataProcessing():
 
     @staticmethod
     def convert_idf_to_csv(idf_path):
-        '''Extracts the data from a ivium .idf and saves the data to a .csv'''
+        '''Extracts the data from a ivium .idf file and saves the data to a .csv file'''
         path = os.path.normpath(idf_path)
         data = DataProcessing.get_idf_data(path)
         if len(data)>0:
