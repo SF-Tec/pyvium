@@ -20,7 +20,6 @@ class DataProcessing():
         data = []
 
         # open and read idf file
-        #with open(idf_path, 'r', encoding='cp1252') as idf:
         with open(idf_path, 'r', encoding='ISO-8859-2') as idf:
             raw_data = idf.read()
     
@@ -41,9 +40,7 @@ class DataProcessing():
     @staticmethod
     def convert_idf_to_csv(idf_path) -> None:
         '''Extracts the data from a ivium .idf file and saves the data to a .csv file'''
-        print(idf_path)
         path = os.path.normpath(rf'{idf_path}')
-        print(path)
         data = DataProcessing.get_idf_data(path)
         DataProcessing.export_to_csv(data,path+'.csv')
     
