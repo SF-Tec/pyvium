@@ -63,3 +63,11 @@
 | :heavy_check_mark: get_data_point(int)                 | :heavy_check_mark: IV_getdata(pointnr, x, y, z)                 |
 | :heavy_check_mark: get_data_point_from_scan(int, int)  | :heavy_check_mark: IV_getdatafromline(pointnr, scannr, x, y, z) |
 |                                                        | :small_orange_diamond: IV_getDbFileName(fname)                  |
+
+## Tools Methods
+| Tools Methods (DataProcessing)                   | Description                                                     |
+| ------------------------------------------------ | --------------------------------------------------------------- |
+| :heavy_check_mark: export_to_csv(data,file_path) |Saves data on a .csv file                                            |
+| :heavy_check_mark: get_idf_data(idf_path)        |Extracts the data from a ivium .idf file and returns a lits of points (data matrix) |
+| :heavy_check_mark: convert_idf_to_csv(idf_path)  |Extracts the data from a ivium .idf file and saves the data to a .csv file |
+| :heavy_check_mark: convert_idf_dir_to_csv(idf_dir_path='.')  |Extracts the data of all .idf files on a directory and saves the data to .csv files |

@@ -49,6 +49,17 @@ Pyvium.get_device_status()
 Pyvium.close_driver()
 
 ```
+## Usage Example (Using Tools methods)
+
+This offers further functionality in data processing:
+
+
+```
+from pyvium import Tools
+
+Tools.convert_idf_dir_to_csv()
+
+```
 
 ## Supported functions
 
