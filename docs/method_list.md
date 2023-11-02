@@ -14,6 +14,7 @@
 | :heavy_check_mark: get_device_status()                 | :heavy_check_mark: IV_getdevicestatus()                         |
 | :heavy_check_mark: is_iviumsoft_running()              |                                                                 |
 | :heavy_check_mark: get_device_serial_number()          | :heavy_check_mark: IV_readSN()                                  |
+| :small_orange_diamond: select_device(str)              | :heavy_check_mark: IV_SelectSn(str)                             |
 | :heavy_check_mark: connect_device()                    | :heavy_check_mark: IV_connect(int)                              |
 | :heavy_check_mark: disconnect_device()                 | :heavy_check_mark: IV_connect(int)                              |
 |                                                        | :heavy_check_mark: IV_VersionHost(version)                      |
@@ -62,7 +63,10 @@
 | :heavy_check_mark: get_available_data_points_number()  | :heavy_check_mark: IV_Ndatapoints(value)                        |
 | :heavy_check_mark: get_data_point(int)                 | :heavy_check_mark: IV_getdata(pointnr, x, y, z)                 |
 | :heavy_check_mark: get_data_point_from_scan(int, int)  | :heavy_check_mark: IV_getdatafromline(pointnr, scannr, x, y, z) |
-|                                                        | :small_orange_diamond: IV_getDbFileName(fname)                  |
+|                                                        | :heavy_check_mark: IV_getDbFileName(fname)                      |
+|                                                        | :small_orange_diamond: IV_StatusParGet(value)                   |
+|                                                        | :small_orange_diamond: IV_StatusParSet(value)                   |
+|                                                        | :small_orange_diamond: IV_UpdateTemperature(value)              |
 
 ## Tools Methods
 | Tools Methods (DataProcessing)                   | Description                                                     |
