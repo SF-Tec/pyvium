@@ -42,7 +42,7 @@ class DataProcessing:
 
         for index, line in enumerate(lines):
             if "primary_data" in line:
-                data["primary_data"].extend(DataProcessing._extract_data_section(index))
+                data.extend(DataProcessing._extract_data_section(lines, index))
 
         return data
     
@@ -58,12 +58,12 @@ class DataProcessing:
         # split the file into a list of lines
         lines = raw_data.splitlines()
 
-        def extract_osc_data(start_index: int) -> List[List[int]]:
+        def extract_osc_data(lines, start_index: int) -> List[List[int]]:
             section_data = []
             num_sections = int(lines[start_index + 1])
             start = start_index + 1
             for _ in range(num_sections):
-                section, end = extract_data_section(int(start))
+                section, end = extract_data_section(lines, int(start))
                 section_data.append(section)
                 start = end - 1
             return section_data
@@ -78,7 +78,7 @@ class DataProcessing:
             elif "RsCs_data" in line:
                 data["RsCs_data"] = DataProcessing._extract_data_section(lines, index)
             elif "osc_data" in line:
-                data["osc_data"] = extract_osc_data(index)
+                data["osc_data"] = extract_osc_data(lines, index)
 
         return data
 
