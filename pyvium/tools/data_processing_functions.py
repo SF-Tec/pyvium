@@ -8,18 +8,30 @@ from ..util import get_file_list
 
 class DataProcessing:
     @staticmethod
+    def _extract_data_section(lines: List[str], start_index: int) -> List[List[int]]:
+        """Extracts a section of data from a list of lines starting at the given index. """
+        section_data = []
+        num_points = int(lines[start_index + 2])
+        start = start_index + 3
+        end = start + num_points
+        for line_index in range(start, end):
+            row = lines[line_index].split()
+            datapoint = [eval(value) for value in row]
+            section_data.append(datapoint)
+        return section_data, end
+
+    @staticmethod
     def export_to_csv(data, file_path) -> None:
-        """Saves data on a .csv file."""
+        """Saves the given data to a CSV file at the specified file path."""
         path = os.path.normpath(file_path)
         with open(path, "w", encoding="UTF-8") as f:
             write = csv.writer(f)
             write.writerows(data)
 
     @staticmethod
-    def get_idf_data(
-        idf_path: str, include: List[str] = []
-    ) -> Union[List[List[int]], Dict[str, List[List[int]]]]:
-        data = {"primary_data": []}
+    def get_idf_data(idf_path: str) -> List[List[int]]:
+        """Extracts prymary data from an IDF file and returns it as a list."""
+        data = []
 
         # open and read idf file
         with open(idf_path, "r", encoding="ISO-8859-2") as idf:
@@ -28,16 +40,23 @@ class DataProcessing:
         # split the file into a list of lines
         lines = raw_data.splitlines()
 
-        def extract_data_section(start_index: int) -> List[List[int]]:
-            section_data = []
-            num_points = int(lines[start_index + 2])
-            start = start_index + 3
-            end = start + num_points
-            for line_index in range(start, end):
-                row = lines[line_index].split()
-                datapoint = [eval(value) for value in row]
-                section_data.append(datapoint)
-            return section_data, end
+        for index, line in enumerate(lines):
+            if "primary_data" in line:
+                data["primary_data"].extend(DataProcessing._extract_data_section(index))
+
+        return data
+    
+    @staticmethod
+    def get_all_idf_data(idf_path: str) -> Dict[str, List[List[int]]]:
+        """Extracts all data (primary and extra measurement data) from an IDF file and returns it as a dictionary."""
+        data = {"primary_data": []}
+
+        # open and read idf file
+        with open(idf_path, "r", encoding="ISO-8859-2") as idf:
+            raw_data = idf.read()
+
+        # split the file into a list of lines
+        lines = raw_data.splitlines()
 
         def extract_osc_data(start_index: int) -> List[List[int]]:
             section_data = []
@@ -51,18 +70,15 @@ class DataProcessing:
 
         for index, line in enumerate(lines):
             if "primary_data" in line:
-                data["primary_data"].extend(extract_data_section(index))
-            elif "ocp" in include and "ocpdata" in line:
-                data["ocpdata"] = extract_data_section(index)
-            elif "pretreatment" in include and "pretreatmentdata" in line:
-                data["pretreatmentdata"] = extract_data_section(index)
-            elif "rc" in include and "RsCs_data" in line:
-                data["RsCs_data"] = extract_data_section(index)
-            elif "osc" in include and "osc_data" in line:
+                data["primary_data"].extend(DataProcessing._extract_data_section(lines, index))
+            elif "ocpdata" in line:
+                data["ocpdata"] = DataProcessing._extract_data_section(lines, index)
+            elif "pretreatmentdata" in line:
+                data["pretreatmentdata"] = DataProcessing._extract_data_section(lines, index)
+            elif "RsCs_data" in line:
+                data["RsCs_data"] = DataProcessing._extract_data_section(lines, index)
+            elif "osc_data" in line:
                 data["osc_data"] = extract_osc_data(index)
-
-        if len(include) == 0:
-            return data["primary_data"]
 
         return data
 
