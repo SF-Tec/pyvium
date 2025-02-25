@@ -72,6 +72,7 @@
 | Tools Methods (DataProcessing)                   | Description                                                     |
 | ------------------------------------------------ | --------------------------------------------------------------- |
 | :heavy_check_mark: export_to_csv(data,file_path) |Saves data on a .csv file                                            |
-| :heavy_check_mark: get_idf_data(idf_path)        |Extracts the data from a ivium .idf file and returns a lits of points (data matrix) |
+| :heavy_check_mark: get_idf_data(idf_path)        |Extracts the primary data from a ivium .idf file and returns a lits of points (data matrix) |
+| :heavy_check_mark: get_all_idf_data(idf_path)    |Extracts all data (primary and extra data) from a ivium .idf file and returns a data dictionary |
 | :heavy_check_mark: convert_idf_to_csv(idf_path)  |Extracts the data from a ivium .idf file and saves the data to a .csv file |
 | :heavy_check_mark: convert_idf_dir_to_csv(idf_dir_path='.')  |Extracts the data of all .idf files on a directory and saves the data to .csv files |
