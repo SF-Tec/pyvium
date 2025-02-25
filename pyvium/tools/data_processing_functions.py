@@ -18,7 +18,7 @@ class DataProcessing:
             row = lines[line_index].split()
             datapoint = [eval(value) for value in row]
             section_data.append(datapoint)
-        return section_data, end
+        return section_data
 
     @staticmethod
     def export_to_csv(data, file_path) -> None:
