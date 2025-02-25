@@ -94,7 +94,7 @@ class DataProcessing:
         """Extracts the data of all .idf files on a directory and saves the data .csv files"""
         path = os.path.normpath(idf_dir_path)
         files = get_file_list(path)
-        idf_files = list(filter(lambda file: (file[-4:] == ".idf"), files))
+        idf_files = list(filter(lambda file: file.endswith(".idf"), files))
         converted_count = 0
         errors = []
         for idf_filename in tqdm(idf_files):
