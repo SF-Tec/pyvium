@@ -30,7 +30,7 @@ class DataProcessing:
 
     @staticmethod
     def get_idf_data(idf_path: str) -> List[List[int]]:
-        """Extracts prymary data from an IDF file and returns it as a list."""
+        """Extracts primary data from an IDF file and returns it as a list."""
         data = []
 
         # open and read idf file
