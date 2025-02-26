@@ -63,7 +63,7 @@ class DataProcessing:
             num_sections = int(lines[start_index + 1])
             start = start_index + 1
             for _ in range(num_sections):
-                section, end = extract_data_section(lines, int(start))
+                section, end = DataProcessing._extract_data_section(lines, int(start))
                 section_data.append(section)
                 start = end - 1
             return section_data
