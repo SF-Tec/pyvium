@@ -17,11 +17,11 @@ class DataProcessing:
             end = start + num_points
             for line_index in range(start, end):
                 row = lines[line_index].split()
-                datapoint = [float(value.strip()) for value in row]
+                datapoint = [float(value) for value in row]
                 section_data.append(datapoint)
             return section_data
         except ValueError as e:
-            print(f"Warning: Could not parse data section (starting at: {start_index}). Error: {e}")
+            print(f"Warning: Could not parse data section. Error: {e}")
             return []
 
     @staticmethod
