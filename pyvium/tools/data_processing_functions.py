@@ -9,7 +9,7 @@ from ..util import get_file_list
 class DataProcessing:
     @staticmethod
     def _extract_data_section(lines: List[str], start_index: int) -> List[List[int]]:
-        """Extracts a section of data from a list of lines starting at the given index. """
+        """Extracts a section of data from a list of lines starting at the given index."""
         section_data = []
         num_points = int(lines[start_index + 2])
         start = start_index + 3
