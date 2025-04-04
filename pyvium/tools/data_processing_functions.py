@@ -9,7 +9,7 @@ from ..util import get_file_list
 class DataProcessing:
     @staticmethod
     def _extract_data_section(lines: List[str], start_index: int) -> List[List[float]]:
-        """Extracts a section of data from a list of lines starting at the given index. """
+        """Extracts a section of data from a list of lines starting at the given index."""
         try:
             section_data = []
             num_points = int(lines[start_index + 2].strip().replace('\x00', ''))
@@ -21,7 +21,7 @@ class DataProcessing:
                 section_data.append(datapoint)
             return section_data
         except ValueError as e:
-            print(f"Warning: Could not parse data section (line start: {start_index}). Error: {e}")
+            print(f"Warning: Could not parse data section (starting at: {start_index}). Error: {e}")
             return []
 
     @staticmethod
