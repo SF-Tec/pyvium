@@ -8,6 +8,7 @@ from ..util import get_file_list
 
 class DataProcessing:
     @staticmethod
+
     def _extract_data_section(lines: List[str], start_index: int) -> List[List[float]]:
         """Extracts a section of data from a list of lines starting at the given index."""
         try:
@@ -33,7 +34,7 @@ class DataProcessing:
             write.writerows(data)
 
     @staticmethod
-    def get_idf_data(idf_path: str) -> List[List[float]]:
+    def get_idf_data(idf_path: str) -> List[List[int]]:
         """Extracts primary data from an IDF file and returns it as a list."""
         data = []
 
@@ -51,7 +52,7 @@ class DataProcessing:
         return data
     
     @staticmethod
-    def get_all_idf_data(idf_path: str) -> Dict[str, List[List[float]]]:
+    def get_all_idf_data(idf_path: str) -> Dict[str, List[List[int]]]:
         """Extracts all data (primary and extra measurement data) from an IDF file and returns it as a dictionary."""
         data = {"primary_data": []}
 
@@ -62,20 +63,15 @@ class DataProcessing:
         # split the file into a list of lines
         lines = raw_data.splitlines()
 
-        def extract_osc_data(lines, start_index: int) -> List[List[float]]:
-            try:
-                section_data = []
-                num_sections = int(lines[start_index + 1].strip().replace('\x00', ''))
-                start = start_index + 1
-                for _ in range(num_sections):
-                    section = DataProcessing._extract_data_section(lines, int(start))
-                    section_data.append(section)
-                    num_points = int(lines[start + 2])
-                    start = start + 2 + num_points
-                return section_data
-            except ValueError as e:
-                print(f"Warning: Could not parse osc_data section. Error: {e}")
-                return []
+        def extract_osc_data(lines, start_index: int) -> List[List[int]]:
+            section_data = []
+            num_sections = int(lines[start_index + 1])
+            start = start_index + 1
+            for _ in range(num_sections):
+                section, end = DataProcessing._extract_data_section(lines, int(start))
+                section_data.append(section)
+                start = end - 1
+            return section_data
 
         for index, line in enumerate(lines):
             if "primary_data" in line:
