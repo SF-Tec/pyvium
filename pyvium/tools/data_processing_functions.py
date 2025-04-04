@@ -8,7 +8,6 @@ from ..util import get_file_list
 
 class DataProcessing:
     @staticmethod
-
     def _extract_data_section(lines: List[str], start_index: int) -> List[List[float]]:
         """Extracts a section of data from a list of lines starting at the given index."""
         try:
