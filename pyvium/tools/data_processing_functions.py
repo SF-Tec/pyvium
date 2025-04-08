@@ -9,6 +9,8 @@ from ..util import get_file_list
 class DataProcessing:
     @staticmethod
     def _extract_data_section(lines: List[str], start_index: int) -> List[List[float]]:
+        if not lines or start_index >= len(lines):
+        raise ValueError("Invalid input parameters")
         """Extracts a section of data from a list of lines starting at the given index."""
         try:
             section_data = []
